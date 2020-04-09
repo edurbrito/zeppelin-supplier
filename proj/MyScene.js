@@ -29,7 +29,7 @@ class MyScene extends CGFscene {
         this.cylinderMaterial.setDiffuse(0.9, 0.9, 0.9, 1);
         this.cylinderMaterial.setSpecular(0.1, 0.1, 0.1, 1);
         this.cylinderMaterial.setShininess(10.0);
-        this.cylinderMaterial.loadTexture('images/earth.jng');
+        this.cylinderMaterial.loadTexture('images/earth.jpg');
         this.cylinderMaterial.setTextureWrap('REPEAT', 'REPEAT');
         //------
 
