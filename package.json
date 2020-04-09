@@ -1,0 +1,30 @@
+{
+  "name": "cgra_proj",
+  "version": "0.0.1",
+  "description": "CGRA FEUP Project 2019/2020 T7G07",
+  "main": "index.js",
+  "directories": {
+    "lib": "lib",
+    "proj": "proj"
+  },
+  "scripts": {
+    "start": "http-server ./ -a 0.0.0.0 -p 8080"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dianaamfr/CGRA_proj.git"
+  },
+  "keywords": [
+    "CGRA",
+    "FEUP"
+  ],
+  "author": "T7G07",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/dianaamfr/CGRA_proj/issues"
+  },
+  "homepage": "https://github.com/dianaamfr/CGRA_proj",
+  "dependencies": {
+    "http-server": "^0.12.1"
+  }
+}
