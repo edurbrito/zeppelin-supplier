@@ -23,6 +23,16 @@ class MyScene extends CGFscene {
         
         this.enableTextures(true);
 
+        //------ Applied Material
+        this.cylinderMaterial = new CGFappearance(this);
+        this.cylinderMaterial.setAmbient(0.1, 0.1, 0.1, 1);
+        this.cylinderMaterial.setDiffuse(0.9, 0.9, 0.9, 1);
+        this.cylinderMaterial.setSpecular(0.1, 0.1, 0.1, 1);
+        this.cylinderMaterial.setShininess(10.0);
+        this.cylinderMaterial.loadTexture('images/earth.jng');
+        this.cylinderMaterial.setTextureWrap('REPEAT', 'REPEAT');
+        //------
+
         //Initialize scene objects
         this.axis = new CGFaxis(this);
         this.incompleteSphere = new MySphere(this, 16, 8);
@@ -31,6 +41,7 @@ class MyScene extends CGFscene {
         //Objects connected to MyInterface
         this.displayAxis = true;
         this.displayNormals = true;
+        
     }
     initLights() {
         this.lights[0].setPosition(15, 2, 5, 1);
@@ -79,7 +90,10 @@ class MyScene extends CGFscene {
         else
             this.cylinder.disableNormalViz();
         
+        this.pushMatrix();
+        this.cylinderMaterial.apply();
         this.cylinder.display();
+        this.popMatrix();
 
         // ---- END Primitive drawing section
     }
