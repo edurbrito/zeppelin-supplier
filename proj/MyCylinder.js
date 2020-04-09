@@ -54,7 +54,7 @@ class MyCylinder extends CGFobject {
             normal[2]/=nsize;
 
             // push normal once for each vertex of this triangle
-            for(var i = 0; i < 2; i++){
+            for(var j = 0; j < 2; j++){
                 this.normals.push(...normal);
                 this.normals.push(...normal);
                 this.normals.push(...normal);
@@ -62,7 +62,6 @@ class MyCylinder extends CGFobject {
                 this.normals.push(...normal);
                 this.normals.push(...normal);
             }
-
 
             this.indices.push(6*i, (6*i+1) , (6*i+2),(6*i+3),(6*i+4),(6*i+5));
 
