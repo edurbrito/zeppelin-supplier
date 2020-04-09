@@ -78,5 +78,3 @@ class MyCylinder extends CGFobject {
         this.initNormalVizBuffers();
     }
 }
-
-
