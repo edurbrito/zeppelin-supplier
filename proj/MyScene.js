@@ -23,7 +23,7 @@ class MyScene extends CGFscene {
         
         this.enableTextures(true);
 
-        //------ Applied Material
+        //------ Cylinder Material
         this.cylinderMaterial = new CGFappearance(this);
         this.cylinderMaterial.setAmbient(0.1, 0.1, 0.1, 1);
         this.cylinderMaterial.setDiffuse(0.9, 0.9, 0.9, 1);
@@ -33,14 +33,29 @@ class MyScene extends CGFscene {
         this.cylinderMaterial.setTextureWrap('REPEAT', 'REPEAT');
         //------
 
+        //------ World Material
+        this.earthMaterial = new CGFappearance(this);
+        this.earthMaterial.setAmbient(0.1, 0.1, 0.1, 1);
+        this.earthMaterial.setDiffuse(0.9, 0.9, 0.9, 1);
+        this.earthMaterial.setSpecular(0.1, 0.1, 0.1, 1);
+        this.earthMaterial.setShininess(10.0);
+        this.earthMaterial.loadTexture('images/earth.jpg');
+        this.earthMaterial.setTextureWrap('REPEAT', 'REPEAT');
+        //------
+
         // Initialize scene objects
         this.axis = new CGFaxis(this);
         this.incompleteSphere = new MySphere(this, 16, 8);
         this.cylinder = new MyCylinder(this,30,10);
+        this.objects = [this.cylinder,this.incompleteSphere];
+
+        // Labels and ID's for object selection on MyInterface
+        this.objectIDs = { 'Cylinder': 0 , 'Sphere': 1};
 
         // Objects connected to MyInterface
+        this.selectedObject = 1;
         this.displayAxis = true;
-        this.displayNormals = true;
+        this.displayNormals = false;
         
     }
     initLights() {
@@ -82,17 +97,19 @@ class MyScene extends CGFscene {
 
         // ---- BEGIN Primitive drawing section
 
-        //This sphere does not have defined texture coordinates
-        // this.incompleteSphere.display();
+        this.pushMatrix();
         
         if (this.displayNormals)
-            this.cylinder.enableNormalViz();
+            this.objects[this.selectedObject].enableNormalViz();
         else
-            this.cylinder.disableNormalViz();
+            this.objects[this.selectedObject].disableNormalViz();
+
+        if(this.selectedObject == 0)
+            this.cylinderMaterial.apply();
+        else if(this.selectedObject == 1)
+            this.earthMaterial.apply();
         
-        this.pushMatrix();
-        this.cylinderMaterial.apply();
-        this.cylinder.display();
+        this.objects[this.selectedObject].display();
         this.popMatrix();
 
         // ---- END Primitive drawing section
