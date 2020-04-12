@@ -23,7 +23,15 @@ class MyScene extends CGFscene {
         
         this.enableTextures(true);
 
+        // Initialize scene materials      
+        this.cylinderMaterial = new CGFappearance(this);
+        this.earthMaterial = new CGFappearance(this);
+        this.scene1Material = new CGFappearance(this);
+        this.scene2Material = new CGFappearance(this);
+        
         this.loadMaterials();
+
+        this.scenes = [this.scene1Material,this.scene2Material];
 
         // Initialize scene objects
         this.axis = new CGFaxis(this);
@@ -34,9 +42,13 @@ class MyScene extends CGFscene {
         // Labels and ID's for object selection on MyInterface
         this.objectIDs = { 'Cylinder': 0 , 'Sphere': 1};
 
+        // Labels and ID's for scene selection on MyInterface
+        this.sceneIDs = { 'Scene1': 0 , 'Scene2': 1};
+
         // Objects connected to MyInterface
         this.cubeMap = new MyCubeMap(this);
         this.selectedObject = 1;
+        this.selectedScene = 0;
         this.displayAxis = true;
         this.displayNormals = false;
         
@@ -63,7 +75,6 @@ class MyScene extends CGFscene {
 
     loadMaterials(){
         //------ Cylinder Material
-        this.cylinderMaterial = new CGFappearance(this);
         this.cylinderMaterial.setAmbient(0.1, 0.1, 0.1, 1);
         this.cylinderMaterial.setDiffuse(0.9, 0.9, 0.9, 1);
         this.cylinderMaterial.setSpecular(0.1, 0.1, 0.1, 1);
@@ -73,7 +84,6 @@ class MyScene extends CGFscene {
         //------
 
         //------ World Material
-        this.earthMaterial = new CGFappearance(this);
         this.earthMaterial.setAmbient(0.1, 0.1, 0.1, 1);
         this.earthMaterial.setDiffuse(0.9, 0.9, 0.9, 1);
         this.earthMaterial.setSpecular(0.1, 0.1, 0.1, 1);
@@ -83,13 +93,21 @@ class MyScene extends CGFscene {
         //------
 
         //------ Scene 1 Material
-        this.scene1Material = new CGFappearance(this);
         this.scene1Material.setAmbient(1.0, 1.0, 1.0, 1);
         this.scene1Material.setDiffuse(0.0, 0.0, 0.0, 1);
         this.scene1Material.setSpecular(0.0, 0.0, 0.0, 1);
         this.scene1Material.setShininess(10.0);
-        this.scene1Material.loadTexture('images/cubemap2.png');
+        this.scene1Material.loadTexture('images/cubemap.png');
         this.scene1Material.setTextureWrap('REPEAT', 'REPEAT');
+        //------
+
+        //------ Scene 2 Material
+        this.scene2Material.setAmbient(1.0, 1.0, 1.0, 1);
+        this.scene2Material.setDiffuse(0.0, 0.0, 0.0, 1);
+        this.scene2Material.setSpecular(0.0, 0.0, 0.0, 1);
+        this.scene2Material.setShininess(10.0);
+        this.scene2Material.loadTexture('images/cubemap2.png');
+        this.scene2Material.setTextureWrap('REPEAT', 'REPEAT');
         //------
 
     }
