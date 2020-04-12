@@ -23,6 +23,45 @@ class MyScene extends CGFscene {
         
         this.enableTextures(true);
 
+        this.loadMaterials();
+
+        // Initialize scene objects
+        this.axis = new CGFaxis(this);
+        this.incompleteSphere = new MySphere(this, 16, 8);
+        this.cylinder = new MyCylinder(this,30,10);
+        this.objects = [this.cylinder,this.incompleteSphere];
+
+        // Labels and ID's for object selection on MyInterface
+        this.objectIDs = { 'Cylinder': 0 , 'Sphere': 1};
+
+        // Objects connected to MyInterface
+        this.cubeMap = new MyCubeMap(this);
+        this.selectedObject = 1;
+        this.displayAxis = true;
+        this.displayNormals = false;
+        
+    }
+    initLights() {
+        this.lights[0].setPosition(15, 2, 5, 1);
+        this.lights[0].setDiffuse(1.0, 1.0, 1.0, 1.0);
+        this.lights[0].enable();
+        this.lights[0].update();
+    }
+    initCameras() {
+        this.camera = new CGFcamera(0.4, 0.1, 500, vec3.fromValues(25,0, 25), vec3.fromValues(0, 0, 0));
+    }
+    setDefaultAppearance() {
+        this.setAmbient(0.2, 0.4, 0.8, 1.0);
+        this.setDiffuse(0.2, 0.4, 0.8, 1.0);
+        this.setSpecular(0.2, 0.4, 0.8, 1.0);
+        this.setShininess(10.0);
+    }
+    // called periodically (as per setUpdatePeriod() in init())
+    update(t){
+        //To be done...
+    }
+
+    loadMaterials(){
         //------ Cylinder Material
         this.cylinderMaterial = new CGFappearance(this);
         this.cylinderMaterial.setAmbient(0.1, 0.1, 0.1, 1);
@@ -43,39 +82,16 @@ class MyScene extends CGFscene {
         this.earthMaterial.setTextureWrap('REPEAT', 'REPEAT');
         //------
 
-        // Initialize scene objects
-        this.axis = new CGFaxis(this);
-        this.incompleteSphere = new MySphere(this, 16, 8);
-        this.cylinder = new MyCylinder(this,30,10);
-        this.objects = [this.cylinder,this.incompleteSphere];
+        //------ Scene 1 Material
+        this.scene1Material = new CGFappearance(this);
+        this.scene1Material.setAmbient(1.0, 1.0, 1.0, 1);
+        this.scene1Material.setDiffuse(0.0, 0.0, 0.0, 1);
+        this.scene1Material.setSpecular(0.0, 0.0, 0.0, 1);
+        this.scene1Material.setShininess(10.0);
+        this.scene1Material.loadTexture('images/cubemap2.png');
+        this.scene1Material.setTextureWrap('REPEAT', 'REPEAT');
+        //------
 
-        // Labels and ID's for object selection on MyInterface
-        this.objectIDs = { 'Cylinder': 0 , 'Sphere': 1};
-
-        // Objects connected to MyInterface
-        this.selectedObject = 1;
-        this.displayAxis = true;
-        this.displayNormals = false;
-        
-    }
-    initLights() {
-        this.lights[0].setPosition(15, 2, 5, 1);
-        this.lights[0].setDiffuse(1.0, 1.0, 1.0, 1.0);
-        this.lights[0].enable();
-        this.lights[0].update();
-    }
-    initCameras() {
-        this.camera = new CGFcamera(0.4, 0.1, 500, vec3.fromValues(15, 15, 15), vec3.fromValues(0, 0, 0));
-    }
-    setDefaultAppearance() {
-        this.setAmbient(0.2, 0.4, 0.8, 1.0);
-        this.setDiffuse(0.2, 0.4, 0.8, 1.0);
-        this.setSpecular(0.2, 0.4, 0.8, 1.0);
-        this.setShininess(10.0);
-    }
-    // called periodically (as per setUpdatePeriod() in init())
-    update(t){
-        //To be done...
     }
 
     display() {
@@ -110,6 +126,9 @@ class MyScene extends CGFscene {
             this.earthMaterial.apply();
         
         this.objects[this.selectedObject].display();
+
+        this.cubeMap.display();
+
         this.popMatrix();
 
         // ---- END Primitive drawing section
