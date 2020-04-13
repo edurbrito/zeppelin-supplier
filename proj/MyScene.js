@@ -37,17 +37,18 @@ class MyScene extends CGFscene {
         this.axis = new CGFaxis(this);
         this.incompleteSphere = new MySphere(this, 16, 8);
         this.cylinder = new MyCylinder(this,30,10);
-        this.objects = [this.cylinder,this.incompleteSphere];
+        this.vehicle = new MyVehicle(this);
+        this.objects = [this.cylinder,this.incompleteSphere, this.vehicle];
 
         // Labels and ID's for object selection on MyInterface
-        this.objectIDs = { 'Cylinder': 0 , 'Sphere': 1};
+        this.objectIDs = { 'Cylinder': 0 , 'Sphere': 1, 'Vehicle': 2};
 
         // Labels and ID's for scene selection on MyInterface
         this.sceneIDs = { 'Scene1': 0 , 'Scene2': 1};
 
         // Objects connected to MyInterface
         this.cubeMap = new MyCubeMap(this);
-        this.selectedObject = 1;
+        this.selectedObject = 2;
         this.selectedScene = 0;
         this.displayAxis = true;
         this.displayNormals = false;
