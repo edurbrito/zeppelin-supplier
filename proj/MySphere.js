@@ -29,6 +29,8 @@ class MySphere extends CGFobject {
     var phiInc = Math.PI / this.latDivs;
     var thetaInc = (2 * Math.PI) / this.longDivs;
     var latVertices = this.longDivs + 1;
+    var latFac = 1/this.latDivs;
+    var longFac = 1/this.longDivs;
 
     // build an all-around stack at a time, starting on "north pole" and proceeding "south"
     for (let latitude = 0; latitude <= this.latDivs; latitude++) {
@@ -65,8 +67,9 @@ class MySphere extends CGFobject {
         theta += thetaInc;
 
         //--- Texture Coordinates
-        // To be done... 
-        // May need some additional code also in the beginning of the function.
+        var s = 0.6 + longFac * longitude;
+        var t = latFac * latitude;
+        this.texCoords.push(s, t);
         
       }
       phi += phiInc;
@@ -76,4 +79,12 @@ class MySphere extends CGFobject {
     this.primitiveType = this.scene.gl.TRIANGLES;
     this.initGLBuffers();
   }
+
+  updateBuffers(complexity){
+    this.slices = 3 + Math.round(9 * complexity); // Complexity varies 0-1, so slices varies 3-12
+
+    // Reinitialize buffers
+    this.initBuffers();
+    this.initNormalVizBuffers();
+}
 }
