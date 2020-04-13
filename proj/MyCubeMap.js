@@ -1,96 +1,46 @@
 /**
 * MyCubeMap
-* @constructor~
+* @constructor
 * @param scene - Reference to MyScene object
 */
 class MyCubeMap extends CGFobject {
 	constructor(scene) {
-		super(scene);
-		this.initBuffers();
+        super(scene);
+        
+        this.face = new MyQuad(this.scene);
 	}
-	initBuffers() {
-        this.indices = [];
-        this.normals = [];
+	display() {
+        this.scene.scenes[this.scene.selectedScene].apply();
 
-		var c = 0.5;
+        this.scene.pushMatrix();
+        this.scene.scale(50,50,50);
 
-		this.vertices = [
-            -c,  c, c,  // 0
-             c,  c, c,  // 1
-            -c, -c, c,  // 2
-             c, -c, c,  // 3
-             c,  c, -c, // 4
-             c, -c, -c, // 5
-            -c, c, -c,  // 6
-            -c, -c, -c,  // 7
-            
-            -c, c, -c,  // 6
-            -c, -c, -c,  // 7
-
-            c,  c, -c, // 4
-            -c, c, -c,  // 6
-
-            c, -c, -c, // 5
-            -c, -c, -c,  // 7
-        ];
-
-        this.indices = [
-            0,1,2,
-            1,3,2,
-
-            1,4,3,
-            4,5,3,
-            
-            4,6,5,
-            6,7,5,
-            
-            6,0,7,
-            0,2,7,
-            
-            0,6,1,
-            1,6,4,
-            
-            2,3,7,
-            3,5,7
-        ];
-
-        for(var i = 0; i < 8; i++){
-            for (var j = 0 + 3*i; j < 3 + 3*i ; j++ )
-                this.normals.push(this.vertices[j] * (-1));
+        var ang = 90;
+        var factor = -1;
+        for(var i = 0; i < 4; i++){
+            this.scene.pushMatrix();
+            if(i % 2 == 0) this.scene.translate(factor * 0.5,0,0); 
+            else this.scene.translate(0,0,factor * 0.5); 
+            this.scene.rotate(graToRad(ang),0,1,0);
+            this.face.updateTexCoords([i*0.25, 2/3, (i+1)*0.25, 2/3, i*0.25, 1/3, (i+1)*0.25, 1/3 ]);
+            this.face.display();
+            this.scene.popMatrix();
+            ang -= 90;
+            if(i >= 1) factor = 1;
         }
 
-        this.texCoords = [
-            0.25,1/3,
-            0.5, 1/3,
-            0.25, 2/3,
-            0.5, 2/3,
-            0.75, 1/3,
-            0.75, 2/3,
-            1, 1/3,
-            1, 2/3, 
+        ang = 0; // As Auxiliary Variable now
+        for(var i = 0; i < 2; i++){
+            this.scene.pushMatrix();
+            this.scene.translate(0,factor*0.5,0);
+            this.scene.rotate(graToRad(factor*90),1,0,0);
+            this.face.updateTexCoords([0.25, 1/3 + ang, 0.5, 1/3 + ang, 0.25, 0 + ang, 0.5, 0 + ang]);
+            this.face.display();
+            this.scene.popMatrix();
+            factor = -1;
+            ang = 2/3;
+        }
 
-            0, 1/3,
-            0, 2/3,
-
-            0.5, 0,
-            0.25, 0,
-
-            0.5, 1,
-            0.25, 1
-        ];
-
-		//The defined indices (and corresponding vertices)
-		//will be read in groups of three to draw triangles
-		this.primitiveType = this.scene.gl.TRIANGLES;
-
-		this.initGLBuffers();
-    }
-    
-    display(){
-        this.scene.pushMatrix();
-        this.scene.scale(10,10,10);
-        this.scene.scenes[this.scene.selectedScene].apply();
-        super.display();
         this.scene.popMatrix();
     }
 }
