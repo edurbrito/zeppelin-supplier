@@ -6,7 +6,7 @@
 class MyCubeMap extends CGFobject {
 	constructor(scene) {
 		super(scene);
-		this.initBuffers();
+        this.initBuffers();
 	}
 	initBuffers() {
         this.indices = [];
@@ -52,10 +52,7 @@ class MyCubeMap extends CGFobject {
             -c,-c,c     // 23
         ];
 
-        var vertices = 8;
-        var faces = 6;
-
-        for(var i=0 ; i < vertices*faces ;i+=4){
+        for(var i=0 ; i < 24  ;i+=4){
             this.indices.push(i);
             this.indices.push(i+2);
             this.indices.push(i+3);
@@ -65,27 +62,27 @@ class MyCubeMap extends CGFobject {
         }
 
         // z = c
-        for(var i =0 ; i <4 ;i+=2)
+        for(var i = 0 ; i <4 ;i++)
             this.normals.push(0,0,-1);
 
         // x = c
-        for(var i =0 ; i <4 ;i+=2)
+        for(var i =0 ; i <4 ;i++)
             this.normals.push(-1,0,0);
 
         // z = -c
-        for(var i =0 ; i <4 ;i+=2)
+        for(var i =0 ; i <4 ;i++)
             this.normals.push(0,0,1);
 
         // x = -c
-        for(var i =0 ; i <4 ;i+=2)
+        for(var i =0 ; i <4 ;i++)
             this.normals.push(1,0,0);
 
         // y = c
-        for(var i =0 ; i <4 ;i+=2)
+        for(var i =0 ; i <4 ;i++)
             this.normals.push(0,-1,0); 
             
         // y = -c
-        for(var i =0 ; i <4 ;i+=2)
+        for(var i =0 ; i <4 ;i++)
             this.normals.push(0,1,0);
 
         this.texCoords = [
