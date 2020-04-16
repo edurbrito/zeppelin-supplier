@@ -29,10 +29,11 @@ class MyScene extends CGFscene {
         this.scene1Material = new CGFappearance(this);
         this.scene2Material = new CGFappearance(this);
         this.scene3Material = new CGFappearance(this);
+        this.scene4Material = new CGFappearance(this);
         
         this.loadMaterials();
 
-        this.scenes = [this.scene1Material,this.scene2Material, this.scene3Material];
+        this.scenes = [this.scene1Material,this.scene2Material, this.scene3Material, this.scene4Material];
 
         // Initialize scene objects
         this.axis = new CGFaxis(this);
@@ -45,14 +46,14 @@ class MyScene extends CGFscene {
         this.objectIDs = { 'Cylinder': 0 , 'Sphere': 1, 'Vehicle': 2};
 
         // Labels and ID's for scene selection on MyInterface
-        this.sceneIDs = { 'Scene1': 0 , 'Scene2': 1, 'Scene3': 2};
+        this.sceneIDs = { 'Scene1': 0 , 'Scene2': 1, 'Scene3': 2, 'Scene4': 3};
 
         // Objects connected to MyInterface
         this.cubeMap = new MyCubeMap(this);
         this.selectedObject = 0;
         this.scaleFactor = 1;
         this.speedFactor = 0.1;
-        this.selectedScene = 2;
+        this.selectedScene = 3;
         this.displayAxis = true;
         this.displayNormals = false;
         
@@ -163,6 +164,14 @@ class MyScene extends CGFscene {
         this.scene3Material.setTextureWrap('REPEAT', 'REPEAT');
         //------
 
+        //------ Scene 4 Material
+        this.scene4Material.setAmbient(1.0, 1.0, 1.0, 1);
+        this.scene4Material.setDiffuse(0.0, 0.0, 0.0, 1);
+        this.scene4Material.setSpecular(0.0, 0.0, 0.0, 1);
+        this.scene4Material.setShininess(10.0);
+        this.scene4Material.loadTexture('images/cubemap4.png');
+        this.scene4Material.setTextureWrap('REPEAT', 'REPEAT');
+        //------
     }
 
     display() {
@@ -183,9 +192,6 @@ class MyScene extends CGFscene {
         this.setDefaultAppearance();
 
         // ---- BEGIN Primitive drawing section
-
-        this.pushMatrix();
-        this.scale(this.scaleFactor,this.scaleFactor,this.scaleFactor);
         
         if (this.displayNormals)
             this.objects[this.selectedObject].enableNormalViz();
@@ -197,11 +203,17 @@ class MyScene extends CGFscene {
         else if(this.selectedObject == 1)
             this.earthMaterial.apply();
         
+        if(this.selectedObject == 2){ // Vehicle Object
+            this.pushMatrix();
+            this.scale(this.scaleFactor,this.scaleFactor,this.scaleFactor);
+        }
+        
         this.objects[this.selectedObject].display();
+        
+        if(this.selectedObject == 2) this.popMatrix();
 
         this.cubeMap.display();
-        this.popMatrix();
-
+        
         // ---- END Primitive drawing section
     }
 }
