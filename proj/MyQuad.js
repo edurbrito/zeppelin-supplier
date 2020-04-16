@@ -29,7 +29,7 @@ class MyQuad extends CGFobject {
 			1, 3, 2
 		];
 
-		//Facing Z positive
+		//Facing Z positive, directed to the center
 		this.normals = [
 			 1,  1, 1,
 			-1,  1, 1,
