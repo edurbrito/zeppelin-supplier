@@ -49,6 +49,8 @@ class MyScene extends CGFscene {
         // Objects connected to MyInterface
         this.cubeMap = new MyCubeMap(this);
         this.selectedObject = 2;
+        this.scaleFactor = 1;
+        this.speedFactor = 0.1;
         this.selectedScene = 0;
         this.displayAxis = true;
         this.displayNormals = false;
@@ -56,7 +58,6 @@ class MyScene extends CGFscene {
     }
     initLights() {
         this.lights[0].setPosition(15, 2, 5, 1);
-        //this.lights[0].setAmbient(1.0,1.0,1.0,1.0);
         this.lights[0].setDiffuse(1.0, 1.0, 1.0, 1.0);
         this.lights[0].enable();
         this.lights[0].update();
@@ -79,12 +80,12 @@ class MyScene extends CGFscene {
         // Check for key codes e.g. in https://keycode.info/
         if (this.gui.isKeyPressed("KeyW")) {
             text += " W ";
-            this.vehicle.accelerate(0.05);
+            this.vehicle.accelerate(this.speedFactor*0.1);
             keysPressed=true;
         }
         if (this.gui.isKeyPressed("KeyS")) {
             text += " S ";
-            this.vehicle.accelerate(-0.05);
+            this.vehicle.accelerate(-this.speedFactor*0.1);
             keysPressed = true;
         }
         if (this.gui.isKeyPressed("KeyA")) {
@@ -171,6 +172,9 @@ class MyScene extends CGFscene {
         this.setDefaultAppearance();
 
         // ---- BEGIN Primitive drawing section
+
+        this.pushMatrix();
+        this.scale(this.scaleFactor,this.scaleFactor,this.scaleFactor);
         
         if (this.displayNormals)
             this.objects[this.selectedObject].enableNormalViz();
@@ -184,7 +188,8 @@ class MyScene extends CGFscene {
         
         this.objects[this.selectedObject].display();
 
-        //this.cubeMap.display();
+        this.cubeMap.display();
+        this.popMatrix();
 
         // ---- END Primitive drawing section
     }
