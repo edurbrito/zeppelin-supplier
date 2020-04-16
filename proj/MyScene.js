@@ -28,10 +28,11 @@ class MyScene extends CGFscene {
         this.earthMaterial = new CGFappearance(this);
         this.scene1Material = new CGFappearance(this);
         this.scene2Material = new CGFappearance(this);
+        this.scene3Material = new CGFappearance(this);
         
         this.loadMaterials();
 
-        this.scenes = [this.scene1Material,this.scene2Material];
+        this.scenes = [this.scene1Material,this.scene2Material, this.scene3Material];
 
         // Initialize scene objects
         this.axis = new CGFaxis(this);
@@ -44,14 +45,14 @@ class MyScene extends CGFscene {
         this.objectIDs = { 'Cylinder': 0 , 'Sphere': 1, 'Vehicle': 2};
 
         // Labels and ID's for scene selection on MyInterface
-        this.sceneIDs = { 'Scene1': 0 , 'Scene2': 1};
+        this.sceneIDs = { 'Scene1': 0 , 'Scene2': 1, 'Scene3': 2};
 
         // Objects connected to MyInterface
         this.cubeMap = new MyCubeMap(this);
-        this.selectedObject = 2;
+        this.selectedObject = 0;
         this.scaleFactor = 1;
         this.speedFactor = 0.1;
-        this.selectedScene = 0;
+        this.selectedScene = 2;
         this.displayAxis = true;
         this.displayNormals = false;
         
@@ -81,12 +82,12 @@ class MyScene extends CGFscene {
         // Check for key codes e.g. in https://keycode.info/
         if (this.gui.isKeyPressed("KeyW")) {
             text += " W ";
-            this.vehicle.accelerate(this.speedFactor*0.1);
+            this.vehicle.accelerate(this.speedFactor);
             keysPressed=true;
         }
         if (this.gui.isKeyPressed("KeyS")) {
             text += " S ";
-            this.vehicle.accelerate(-this.speedFactor*0.1);
+            this.vehicle.accelerate(-this.speedFactor);
             keysPressed = true;
         }
         if (this.gui.isKeyPressed("KeyA")) {
@@ -151,6 +152,15 @@ class MyScene extends CGFscene {
         this.scene2Material.setShininess(10.0);
         this.scene2Material.loadTexture('images/cubemap2.png');
         this.scene2Material.setTextureWrap('REPEAT', 'REPEAT');
+        //------
+
+        //------ Scene 3 Material
+        this.scene3Material.setAmbient(1.0, 1.0, 1.0, 1);
+        this.scene3Material.setDiffuse(0.0, 0.0, 0.0, 1);
+        this.scene3Material.setSpecular(0.0, 0.0, 0.0, 1);
+        this.scene3Material.setShininess(10.0);
+        this.scene3Material.loadTexture('images/cubemap3.png');
+        this.scene3Material.setTextureWrap('REPEAT', 'REPEAT');
         //------
 
     }
