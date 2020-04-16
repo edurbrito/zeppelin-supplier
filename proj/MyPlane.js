@@ -56,6 +56,7 @@ class MyPlane extends CGFobject {
         this.primitiveType = this.scene.gl.TRIANGLE_STRIP;
         this.initGLBuffers();
     }
+    
     // Drawing the plane
     /*
     To draw the plane we need to draw the row we defined, nDivs times.

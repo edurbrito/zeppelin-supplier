@@ -51,24 +51,26 @@ class MyScene extends CGFscene {
         this.selectedScene = 0;
         this.displayAxis = true;
         this.displayNormals = false;
-        
     }
+
     initLights() {
         this.lights[0].setPosition(15, 2, 5, 1);
-        this.lights[0].setAmbient(1.0,1.0,1.0,1.0);
         this.lights[0].setDiffuse(1.0, 1.0, 1.0, 1.0);
         this.lights[0].enable();
         this.lights[0].update();
     }
+
     initCameras() {
         this.camera = new CGFcamera(0.4, 0.1, 500, vec3.fromValues(25,0, 25), vec3.fromValues(0, 0, 0));
     }
+
     setDefaultAppearance() {
         this.setAmbient(0.2, 0.4, 0.8, 1.0);
         this.setDiffuse(0.2, 0.4, 0.8, 1.0);
         this.setSpecular(0.2, 0.4, 0.8, 1.0);
         this.setShininess(10.0);
     }
+
     // called periodically (as per setUpdatePeriod() in init())
     update(t){
         //To be done...
@@ -134,10 +136,14 @@ class MyScene extends CGFscene {
 
         this.pushMatrix();
         
-        if (this.displayNormals)
+        if (this.displayNormals){
             this.objects[this.selectedObject].enableNormalViz();
-        else
+            this.cubeMap.face.enableNormalViz();
+        }
+        else{
             this.objects[this.selectedObject].disableNormalViz();
+            this.cubeMap.face.disableNormalViz();
+        }
 
         if(this.selectedObject == 0)
             this.cylinderMaterial.apply();
@@ -152,4 +158,8 @@ class MyScene extends CGFscene {
 
         // ---- END Primitive drawing section
     }
+}
+
+function graToRad(val){
+    return (val * Math.PI)/180;
 }
