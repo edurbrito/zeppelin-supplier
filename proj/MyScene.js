@@ -208,15 +208,14 @@ class MyScene extends CGFscene {
             this.cylinderMaterial.apply();
         else if(this.selectedObject == 1)
             this.earthMaterial.apply();
-        
-        if(this.selectedObject == 2){ // Vehicle Object
+        else if(this.selectedObject == 2){ 
             this.pushMatrix();
-            this.scale(this.scaleFactor,this.scaleFactor,this.scaleFactor);
+            this.scale(this.scaleFactor,this.scaleFactor,this.scaleFactor); // Vehicle Object Scale
         }
         
         this.objects[this.selectedObject].display();
         
-        if(this.selectedObject == 2) this.popMatrix();
+        if(this.selectedObject == 2) this.popMatrix(); // Vehicle Object Scale
 
         this.cubeMap.display();
         

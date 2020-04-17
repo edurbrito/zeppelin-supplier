@@ -7,7 +7,6 @@ class MyQuad extends CGFobject {
 	constructor(scene, coords) {
 		super(scene);
 		this.initBuffers();
-        this.initNormalVizBuffers();
 		if (coords != undefined)
 			this.updateTexCoords(coords);
 	}

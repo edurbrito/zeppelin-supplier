@@ -67,14 +67,6 @@ class MyVehicle extends CGFobject {
         this.initGLBuffers();
     }
     
-    updateBuffers(complexity){
-        this.slices = 3 + Math.round(9 * complexity); //complexity varies 0-1, so slices varies 3-12
-
-        // reinitialize buffers
-        this.initBuffers();
-        this.initNormalVizBuffers();
-    }
-
     display(){
         this.scene.pushMatrix();
         this.scene.translate(this.x,this.y,this.z);
