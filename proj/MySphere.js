@@ -16,7 +16,6 @@ class MySphere extends CGFobject {
   /**
    * @method initBuffers
    * Initializes the sphere buffers
-   * TODO: DEFINE TEXTURE COORDINATES
    */
   initBuffers() {
     this.vertices = [];
@@ -62,7 +61,7 @@ class MySphere extends CGFobject {
         // at each vertex, the direction of the normal is equal to 
         // the vector from the center of the sphere to the vertex.
         // in a sphere of radius equal to one, the vector length is one.
-        // therefore, the value of the normal is equal to the position vectro
+        // therefore, the value of the normal is equal to the position vector
         this.normals.push(x, y, z);
         theta += thetaInc;
 
@@ -75,16 +74,7 @@ class MySphere extends CGFobject {
       phi += phiInc;
     }
 
-
     this.primitiveType = this.scene.gl.TRIANGLES;
     this.initGLBuffers();
   }
-
-  updateBuffers(complexity){
-    this.slices = 3 + Math.round(9 * complexity); // Complexity varies 0-1, so slices varies 3-12
-
-    // Reinitialize buffers
-    this.initBuffers();
-    this.initNormalVizBuffers();
-}
 }
