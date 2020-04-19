@@ -50,7 +50,7 @@ class MyScene extends CGFscene {
 
         // Objects connected to MyInterface
         this.cubeMap = new MyCubeMap(this);
-        this.selectedObject = 0;
+        this.selectedObject = 2;
         this.scaleFactor = 1;
         this.speedFactor = 0.1;
         this.selectedScene = 3;
