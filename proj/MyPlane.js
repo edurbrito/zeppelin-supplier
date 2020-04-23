@@ -34,10 +34,13 @@ class MyPlane extends CGFobject {
         for (var i = 0; i <= this.nDivs; i++) {
             this.vertices.push(xCoord, 0.5, 0);
             this.vertices.push(xCoord, 0.5 - this.patchLength, 0);
-            this.texCoords.push(i * this.patchLength, 0);
-            this.texCoords.push(i * this.patchLength, this.patchLength);
+            this.texCoords.push(xCoord + 0.5, 0.5 + 0.5);
+            this.texCoords.push(xCoord + 0.5, 1 - this.patchLength);
             xCoord += this.patchLength;
         }
+
+        console.log("VERTICES ", this.vertices);
+        console.log("VERTICES ", this.texCoords);
 
         // Generating indices
         /* for nDivs = 3 output will be [0, 1, 2, 3, 4, 5, 6, 7].

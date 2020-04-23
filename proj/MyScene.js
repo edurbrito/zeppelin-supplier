@@ -29,17 +29,13 @@ class MyScene extends CGFscene {
         this.scene1Material = new CGFappearance(this);
         this.scene2Material = new CGFappearance(this);
         this.scene3Material = new CGFappearance(this);
-        this.scene4Material = new CGFappearance(this);
-        
+        this.scene4Material = new CGFappearance(this);        
+		this.terrainMaterial = new CGFappearance(this);
+
         this.loadMaterials();
 
         this.terrainShader = new CGFshader(this.gl, "terrain.vert", "terrain.frag");
         this.terrainShader.setUniformsValues({ uSampler2: 1 });
-
-        // Shader code panels references
-		this.shadersDiv = document.getElementById("shaders");
-		this.vShaderDiv = document.getElementById("vshader");
-		this.fShaderDiv = document.getElementById("fshader");
 
         this.scenes = [this.scene1Material,this.scene2Material, this.scene3Material, this.scene4Material];
 
@@ -93,26 +89,30 @@ class MyScene extends CGFscene {
         var keysPressed = false;
         
         // Check for key codes e.g. in https://keycode.info/
-        if (this.gui.isKeyPressed("KeyW")) {
-            text += " W ";
-            this.vehicle.accelerate(0.2 * this.speedFactor);
-            keysPressed=true;
-        }
-        if (this.gui.isKeyPressed("KeyS")) {
-            text += " S ";
-            this.vehicle.accelerate(-0.2 * this.speedFactor);
-            keysPressed = true;
-        }
-        if (this.gui.isKeyPressed("KeyA")) {
-            text += " A ";
-            this.vehicle.turn(10);
-            keysPressed=true;
-        }
-        if (this.gui.isKeyPressed("KeyD")) {
-            text += " D ";
-            this.vehicle.turn(-10);
-            keysPressed = true;
-        }
+
+        if(!this.vehicle.autoPilot){
+            if (this.gui.isKeyPressed("KeyW")) {
+                text += " W ";
+                this.vehicle.accelerate(0.2 * this.speedFactor);
+                keysPressed=true;
+            }
+            if (this.gui.isKeyPressed("KeyS")) {
+                text += " S ";
+                this.vehicle.accelerate(-0.2 * this.speedFactor);
+                keysPressed = true;
+            }
+            if (this.gui.isKeyPressed("KeyA")) {
+                text += " A ";
+                this.vehicle.turn(10);
+                keysPressed=true;
+            }
+            if (this.gui.isKeyPressed("KeyD")) {
+                text += " D ";
+                this.vehicle.turn(-10);
+                keysPressed = true;
+            }
+        } 
+        
         if (this.gui.isKeyPressed("KeyR")) {
             text += " R ";
             this.vehicle.reset();
@@ -189,6 +189,17 @@ class MyScene extends CGFscene {
         this.scene4Material.loadTexture('images/cubemap4.png');
         this.scene4Material.setTextureWrap('REPEAT', 'REPEAT');
         //------
+
+        this.terrainTextureH = new CGFtexture(this, "images/heightmap.jpg");
+        this.terrainTextureP = new CGFtexture(this, "images/terrain.jpg");
+
+        this.terrainMaterial.setAmbient(0.3, 0.3, 0.3, 1);
+		this.terrainMaterial.setDiffuse(0.7, 0.7, 0.7, 1);
+		this.terrainMaterial.setSpecular(0.0, 0.0, 0.0, 1);
+        this.terrainMaterial.setShininess(120);
+        this.terrainMaterial.setTexture(this.terrainTextureP);
+        this.terrainMaterial.setTextureWrap('REPEAT', 'REPEAT');
+        
     }
 
     display() {
@@ -229,11 +240,18 @@ class MyScene extends CGFscene {
             this.scale(this.scaleFactor,this.scaleFactor,this.scaleFactor); // Vehicle Object Scale
             this.translate(-this.vehicle.x, -this.vehicle.y, -this.vehicle.z);
         }
+        else{
+            this.pushMatrix();
+            this.terrainMaterial.apply();
+            this.setActiveShader(this.terrainShader);
+            this.terrainTextureH.bind(1);
+        }
        
         this.objects[this.selectedObject].display();
         
-        if(this.selectedObject == 2) this.popMatrix(); // Vehicle Object Scale
+        if(this.selectedObject >= 2) this.popMatrix(); // Vehicle Object Scale
 
+        this.setActiveShader(this.defaultShader);
         this.cubeMap.display();
         
         // ---- END Primitive drawing section

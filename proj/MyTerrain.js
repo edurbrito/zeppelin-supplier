@@ -1,6 +1,6 @@
 class MyTerrain extends MyPlane{
    constructor(scene) {
-      super(scene,20);
+      super(scene,1);
   }
 
    display() {
