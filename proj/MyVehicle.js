@@ -75,8 +75,8 @@ class MyVehicle extends CGFobject {
         this.motor.update(this.speed);
 
         if(this.autoPilot){
-            this.turn( (t-this.last_t) * (2 * Math.PI / 5.0) * 0.055 ); // Factor 0.055 assures the correctness of the approximate values, being the the maximum closer to what is expected, despite oscillations of t
-            this.speed = 2 * Math.PI * 0.085;  // Factor 0.085 assures the correctness of the approximate values, being the the maximum closer to what is expected, despite oscillations of t
+           this.speed = 2 * Math.PI * 0.085;  // Factor 0.085 assures the correctness of the approximate values, being the the maximum closer to what is expected, despite oscillations of t
+           this.turn( (t-this.last_t) * (2 * Math.PI / 5.0) * 0.055 ); // Factor 0.055 assures the correctness of the approximate values, being the the maximum closer to what is expected, despite oscillations of t
         }
         this.last_t = t;
     }
@@ -271,8 +271,8 @@ class Wing {
         this.wing.display();
         this.scene.popMatrix();
 
-        if(this.wingRot > 0) this.wingRot -= 1;
-        else if(this.wingRot < 0) this.wingRot += 1;
+        if(this.wingRot > 0) this.wingRot -= 3;
+        else if(this.wingRot < 0) this.wingRot += 3;
     }
 
     update(turn){
