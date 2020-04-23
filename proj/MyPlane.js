@@ -28,10 +28,14 @@ class MyPlane extends CGFobject {
 
         // Generate vertices
         this.vertices = [];
+        this.texCoords = [];
         var xCoord = -0.5;
+
         for (var i = 0; i <= this.nDivs; i++) {
             this.vertices.push(xCoord, 0.5, 0);
             this.vertices.push(xCoord, 0.5 - this.patchLength, 0);
+            this.texCoords.push(i * this.patchLength, 0);
+            this.texCoords.push(i * this.patchLength, this.patchLength);
             xCoord += this.patchLength;
         }
 
@@ -64,10 +68,17 @@ class MyPlane extends CGFobject {
     To draw each row, the drawElements() function is used. This function draws the geometry defined in initBuffers();
     */
     display() {
+        var i;
         this.scene.pushMatrix();
-        for (var i = 0; i < this.nDivs; i++) {
+        for (i= 0; i < this.nDivs; i++) {
             super.display();
             this.scene.translate(0, -this.patchLength, 0);
+        }
+        
+        this.texCoords = [];
+        for (var j = 0; j <= this.nDivs; j++) {
+            this.texCoords.push(j * this.patchLength, (i+1) * this.patchLength);
+            this.texCoords.push(j * this.patchLength, (i+2) * this.patchLength);
         }
 
         this.scene.popMatrix();

@@ -33,6 +33,14 @@ class MyScene extends CGFscene {
         
         this.loadMaterials();
 
+        this.terrainShader = new CGFshader(this.gl, "terrain.vert", "terrain.frag");
+        this.terrainShader.setUniformsValues({ uSampler2: 1 });
+
+        // Shader code panels references
+		this.shadersDiv = document.getElementById("shaders");
+		this.vShaderDiv = document.getElementById("vshader");
+		this.fShaderDiv = document.getElementById("fshader");
+
         this.scenes = [this.scene1Material,this.scene2Material, this.scene3Material, this.scene4Material];
 
         // Initialize scene objects
@@ -40,10 +48,12 @@ class MyScene extends CGFscene {
         this.incompleteSphere = new MySphere(this, 16, 8);
         this.cylinder = new MyCylinder(this,30,10);
         this.vehicle = new MyVehicle(this);
-        this.objects = [this.cylinder,this.incompleteSphere, this.vehicle];
+        this.terrain = new MyTerrain(this);
+
+        this.objects = [this.cylinder,this.incompleteSphere, this.vehicle, this.terrain];
 
         // Labels and ID's for object selection on MyInterface
-        this.objectIDs = { 'Cylinder': 0 , 'Sphere': 1, 'Vehicle': 2};
+        this.objectIDs = { 'Cylinder': 0 , 'Sphere': 1, 'Vehicle': 2, 'Terrain': 3};
 
         // Labels and ID's for scene selection on MyInterface
         this.sceneIDs = { 'Scene1': 0 , 'Scene2': 1, 'Scene3': 2, 'Scene4': 3};
@@ -52,7 +62,7 @@ class MyScene extends CGFscene {
         this.cubeMap = new MyCubeMap(this);
         this.selectedObject = 2;
         this.scaleFactor = 1;
-        this.speedFactor = 0.1;
+        this.speedFactor = 1;
         this.selectedScene = 0;
         this.displayAxis = true;
         this.displayNormals = false;
@@ -85,12 +95,12 @@ class MyScene extends CGFscene {
         // Check for key codes e.g. in https://keycode.info/
         if (this.gui.isKeyPressed("KeyW")) {
             text += " W ";
-            this.vehicle.accelerate(this.speedFactor);
+            this.vehicle.accelerate(0.2 * this.speedFactor);
             keysPressed=true;
         }
         if (this.gui.isKeyPressed("KeyS")) {
             text += " S ";
-            this.vehicle.accelerate(-this.speedFactor);
+            this.vehicle.accelerate(-0.2 * this.speedFactor);
             keysPressed = true;
         }
         if (this.gui.isKeyPressed("KeyA")) {
@@ -113,7 +123,7 @@ class MyScene extends CGFscene {
         }
     }
 
-    // called periodically (as per setUpdatePeriod() in init())
+    // Called periodically (as per setUpdatePeriod() in init())
     update(t){
         //To be done...
         this.checkKeys();
@@ -214,7 +224,7 @@ class MyScene extends CGFscene {
             this.scale(this.scaleFactor,this.scaleFactor,this.scaleFactor); // Vehicle Object Scale
             this.translate(-this.vehicle.x, -this.vehicle.y, -this.vehicle.z);
         }
-        
+       
         this.objects[this.selectedObject].display();
         
         if(this.selectedObject == 2) this.popMatrix(); // Vehicle Object Scale
