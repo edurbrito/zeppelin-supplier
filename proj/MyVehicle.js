@@ -260,9 +260,9 @@ class Wing {
 
     update(turn){
         if(turn < 0)
-            this.wingRot = Math.max(this.wingRot - turn, 30);
+            this.wingRot = Math.max(this.wingRot + turn, -30);
         else
-            this.wingRot = Math.min(this.wingRot + turn, -30);
+            this.wingRot = Math.min(this.wingRot + turn, 30);
     }
 
     enableNormalViz(){
