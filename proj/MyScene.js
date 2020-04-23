@@ -108,6 +108,11 @@ class MyScene extends CGFscene {
             this.vehicle.reset();
             keysPressed = true;
         }
+        if (this.gui.isKeyPressed("KeyP")) {
+            text += " P ";
+            this.vehicle.setAutoPilot();
+            keysPressed = true;
+        }
         if (keysPressed){
             console.log(text);
         }
@@ -117,7 +122,7 @@ class MyScene extends CGFscene {
     update(t){
         //To be done...
         this.checkKeys();
-        this.vehicle.update();
+        this.vehicle.update(t);
     }
 
     loadMaterials(){

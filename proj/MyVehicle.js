@@ -12,6 +12,9 @@ class MyVehicle extends CGFobject {
         this.y = 10;
         this.z = 0;
 
+        this.autoPilot = false;
+        this.last_t = 0;
+
         this.body = new MySphere(this.scene,16,8);
         this.cabin = new Cabin(this.scene);
         this.motor = new Motor(this.scene);
@@ -65,10 +68,17 @@ class MyVehicle extends CGFobject {
         this.scene.popMatrix();
     }
 
-    update(){
-        this.x += this.speed * Math.sin(this.angle * Math.PI / 180);
-        this.z += this.speed * Math.cos(this.angle * Math.PI / 180);
+    update(t){
+        this.x += this.speed * Math.sin(graToRad(this.angle));
+        this.z += this.speed * Math.cos(graToRad(this.angle));
+        
         this.motor.update(this.speed);
+
+        if(this.autoPilot){
+            this.turn( (t-this.last_t) * (2 * Math.PI / 5.0) * 0.055 ); // Factor 0.055 assures the correctness of the approximate values, being the the maximum closer to what is expected, despite oscillations of t
+            this.speed = 2 * Math.PI * 0.085;  // Factor 0.085 assures the correctness of the approximate values, being the the maximum closer to what is expected, despite oscillations of t
+        }
+        this.last_t = t;
     }
 
     turn(val){
@@ -79,6 +89,12 @@ class MyVehicle extends CGFobject {
 
     accelerate(val){
         this.speed += val;
+        if(this.speed < 0) this.speed = 0;
+    }
+
+    setAutoPilot(){
+        if(this.autoPilot) this.autoPilot = false;
+        else this.autoPilot = true;
     }
 
     reset(){
@@ -87,6 +103,7 @@ class MyVehicle extends CGFobject {
         this.z = 0;
         this.speed = 0;
         this.angle = 0;
+        this.autoPilot = false;
     }
 
     enableNormalViz(){
@@ -254,13 +271,13 @@ class Wing {
         this.wing.display();
         this.scene.popMatrix();
 
-        if(this.wingRot > 0) this.wingRot -= 5;
-        else if(this.wingRot < 0) this.wingRot += 5;
+        if(this.wingRot > 0) this.wingRot -= 1;
+        else if(this.wingRot < 0) this.wingRot += 1;
     }
 
     update(turn){
         if(turn < 0)
-            this.wingRot = Math.max(this.wingRot - turn, 30);
+            this.wingRot = Math.max(this.wingRot + turn, 30);
         else
             this.wingRot = Math.min(this.wingRot + turn, -30);
     }
