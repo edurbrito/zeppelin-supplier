@@ -53,7 +53,7 @@ class MyScene extends CGFscene {
         this.selectedObject = 2;
         this.scaleFactor = 1;
         this.speedFactor = 0.1;
-        this.selectedScene = 3;
+        this.selectedScene = 0;
         this.displayAxis = true;
         this.displayNormals = false;
     }
@@ -181,7 +181,7 @@ class MyScene extends CGFscene {
         // Clear image and depth buffer everytime we update the scene
         this.gl.viewport(0, 0, this.gl.canvas.width, this.gl.canvas.height);
         this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT);
-        // Initialize Model-View matrix as identity (no transformation
+        // Initialize Model-View matrix as identity (no transformation)
         this.updateProjectionMatrix();
         this.loadIdentity();
         // Apply transformations corresponding to the camera position relative to the origin
@@ -210,7 +210,9 @@ class MyScene extends CGFscene {
             this.earthMaterial.apply();
         else if(this.selectedObject == 2){ 
             this.pushMatrix();
+            this.translate(this.vehicle.x, this.vehicle.y, this.vehicle.z);
             this.scale(this.scaleFactor,this.scaleFactor,this.scaleFactor); // Vehicle Object Scale
+            this.translate(-this.vehicle.x, -this.vehicle.y, -this.vehicle.z);
         }
         
         this.objects[this.selectedObject].display();
