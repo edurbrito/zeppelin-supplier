@@ -29,7 +29,10 @@ class MyScene extends CGFscene {
         this.scene1Material = new CGFappearance(this);
         this.scene2Material = new CGFappearance(this);
         this.scene3Material = new CGFappearance(this);
-        this.scene4Material = new CGFappearance(this);        
+        this.scene4Material = new CGFappearance(this);
+        this.planeMaterial1 = new CGFappearance(this);     
+        this.planeMaterial2 = new CGFappearance(this);  
+        this.planeMaterial3 = new CGFappearance(this);        
 		this.terrainMaterial = new CGFappearance(this);
 
         this.loadMaterials();
@@ -190,6 +193,7 @@ class MyScene extends CGFscene {
         this.scene4Material.setTextureWrap('REPEAT', 'REPEAT');
         //------
 
+        //------ Terrain Material
         this.terrainTextureH = new CGFtexture(this, "images/heightmap.jpg");
         this.terrainTextureP = new CGFtexture(this, "images/terrain.jpg");
 
@@ -199,7 +203,36 @@ class MyScene extends CGFscene {
         this.terrainMaterial.setShininess(120);
         this.terrainMaterial.setTexture(this.terrainTextureP);
         this.terrainMaterial.setTextureWrap('REPEAT', 'REPEAT');
-        
+        //------
+
+        //------ Plane Body Material
+        this.planeMaterial1.setAmbient(1.0, 1.0, 1.0, 1);
+        this.planeMaterial1.setDiffuse(0.0, 0.0, 0.0, 1);
+        this.planeMaterial1.setSpecular(0.0, 0.0, 0.0, 1);
+        this.planeMaterial1.setShininess(10.0);
+        this.planeMaterial1.loadTexture('images/planeElementTex.jpg');
+        this.planeMaterial1.setTextureWrap('REPEAT', 'REPEAT');
+        //------
+
+        //------ Plane Wing Material
+        this.planeMaterial2.setAmbient(1.0, 1.0, 1.0, 1);
+        this.planeMaterial2.setDiffuse(0.0, 0.0, 0.0, 1);
+        this.planeMaterial2.setSpecular(0.0, 0.0, 0.0, 1);
+        this.planeMaterial2.setShininess(10.0);
+        this.planeMaterial2.loadTexture('images/metalTex.jpg');
+        this.planeMaterial2.setTextureWrap('REPEAT', 'REPEAT');
+        //------
+
+         //------ Plane Red Material
+         this.planeMaterial3.setAmbient(1.0, 1.0, 1.0, 1);
+         this.planeMaterial3.setDiffuse(0.0, 0.0, 0.0, 1);
+         this.planeMaterial3.setSpecular(0.0, 0.0, 0.0, 1);
+         this.planeMaterial3.setShininess(10.0);
+         this.planeMaterial3.loadTexture('images/redTex.jpg');
+         this.planeMaterial3.setTextureWrap('REPEAT', 'REPEAT');
+         //------
+ 
+
     }
 
     display() {

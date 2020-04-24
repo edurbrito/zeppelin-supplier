@@ -39,11 +39,11 @@ class MyVehicle extends CGFobject {
             this.scene.pushMatrix();
             this.scene.translate(0,1,-2);
             this.scene.rotate(graToRad(ang),0,0,1);
+            this.scene.planeMaterial2.apply();
             wings[i].display();
             this.scene.popMatrix();
             ang += 90;
         }
-        
         this.cabin.display();
 
         var factor = 1;
@@ -59,9 +59,9 @@ class MyVehicle extends CGFobject {
         this.scene.pushMatrix();
         this.scene.translate(0,1.1,0);
         this.scene.scale(1,1,2);
+        this.scene.planeMaterial1.apply();
         this.body.display();
         this.scene.popMatrix();
-
         this.scene.translate(0,10,0);
         this.scene.rotate(graToRad(90), 1,0,0);  
 
@@ -142,6 +142,7 @@ class Cabin {
             this.scene.translate(0,0,factor * 0.5);
             this.scene.scale(0.2,0.2,0.2);
             this.scene.rotate(graToRad(90),1,0,0);
+            this.scene.planeMaterial3.apply();
             this.cabinSphere.display();
             this.scene.popMatrix();
             factor = -1;
@@ -166,7 +167,7 @@ class Motor {
         this.scene = scene;
         this.round = new MySphere(this.scene,16,8);
         this.turbine = new MyCylinder(this.scene,16,8);
-
+        
         this.turbineRot = 0;
 
         this.objects = [this.round, this.turbine];
@@ -176,6 +177,7 @@ class Motor {
         this.scene.pushMatrix();
         this.scene.scale(0.1,0.1,0.3);
         this.scene.rotate(graToRad(90),1,0,0);
+        this.scene.planeMaterial2.apply();
         this.round.display();
         this.scene.popMatrix();
 
@@ -183,6 +185,7 @@ class Motor {
         this.scene.translate(0,0,-0.3);
         this.scene.scale(0.05,0.05,0.05);
         this.scene.rotate(graToRad(90),1,0,0);
+        this.scene.planeMaterial2.apply();
         this.round.display();
         this.scene.popMatrix();
 
@@ -190,6 +193,7 @@ class Motor {
         this.scene.rotate(graToRad(this.turbineRot),0,0,1);
         this.scene.translate(0,-0.25,-0.3);
         this.scene.scale(0.02,0.5,0.02);
+        this.scene.planeMaterial3.apply();
         this.turbine.display();
         this.scene.popMatrix();
     }
@@ -243,6 +247,22 @@ class WingObject extends CGFobject {
             4,3,1,
             1,2,4,
             1,0,2
+        ];
+        
+        this.normals = [
+            0,0,1,
+            0,0,1,
+            0,0,1,
+            0,0,1,
+            0,0,1
+        ];
+        
+        this.texCoords = [
+            0,0,
+            1/3,1,
+            1/3,0,
+            1,1,
+            1,0
 		];
 
 		//The defined indices (and corresponding vertices)
