@@ -10,12 +10,20 @@ varying vec2 vTextureCoord;
 uniform sampler2D uSampler2;
 
 void main() {
-    vec3 offset=vec3(0.0,0.0,0.0);
 
-    vTextureCoord = aTextureCoord;
-    vec2 offsetTerrain = vec2(mod(vTextureCoord.x + 0.5,1.0), mod(vTextureCoord.y + 0.5,1.0));
+	vec3 offset = vec3(0.0,0.0,0.0);
+	
+	vTextureCoord = aTextureCoord;
 
-    offset = aVertexNormal * texture2D(uSampler2, offsetTerrain).b * 0.2;
+	offset = aVertexNormal * texture2D(uSampler2, vTextureCoord).b * 0.25;
 
-    gl_Position = uPMatrix * uMVMatrix * vec4(aVertexPosition+offset, 1.0);
+    if(offset.z > 0.16){
+        // Maximum 8 units height, by the fact that 8/50 = 0.16
+        // And 50, here, represents the final scale of the terrain, the CubeMap, etc. ( 50 x 50 )
+
+        // UNCOMMENT THIS TO ENABLE THE 8 UNITS HEIGHT CONSTRAINT
+        // offset = vec3(offset.x, offset.y , 0.16); 
+    }
+
+	gl_Position = uPMatrix * uMVMatrix * vec4(aVertexPosition+offset, 1.0);
 }

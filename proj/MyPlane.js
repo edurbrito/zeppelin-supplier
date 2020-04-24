@@ -28,19 +28,13 @@ class MyPlane extends CGFobject {
 
         // Generate vertices
         this.vertices = [];
-        this.texCoords = [];
         var xCoord = -0.5;
 
         for (var i = 0; i <= this.nDivs; i++) {
             this.vertices.push(xCoord, 0.5, 0);
             this.vertices.push(xCoord, 0.5 - this.patchLength, 0);
-            this.texCoords.push(xCoord + 0.5, 0.5 + 0.5);
-            this.texCoords.push(xCoord + 0.5, 1 - this.patchLength);
             xCoord += this.patchLength;
         }
-
-        console.log("VERTICES ", this.vertices);
-        console.log("VERTICES ", this.texCoords);
 
         // Generating indices
         /* for nDivs = 3 output will be [0, 1, 2, 3, 4, 5, 6, 7].
@@ -73,15 +67,23 @@ class MyPlane extends CGFobject {
     display() {
         var i;
         this.scene.pushMatrix();
+
         for (i= 0; i < this.nDivs; i++) {
+
+            this.texCoords = [];
+            for (var j = 0; j <= this.nDivs; j++) {
+                this.texCoords.push(j * this.patchLength, i*this.patchLength);
+                this.texCoords.push(j * this.patchLength, (i+1)*this.patchLength);
+            }
+
+            this.updateTexCoordsGLBuffers();
+            this.scene.terrainMaterial.apply();
+            this.scene.setActiveShader(this.scene.terrainShader);
+            this.scene.terrainTextureP.bind(0);
+            this.scene.terrainTextureH.bind(1);
+
             super.display();
             this.scene.translate(0, -this.patchLength, 0);
-        }
-        
-        this.texCoords = [];
-        for (var j = 0; j <= this.nDivs; j++) {
-            this.texCoords.push(j * this.patchLength, (i+1) * this.patchLength);
-            this.texCoords.push(j * this.patchLength, (i+2) * this.patchLength);
         }
 
         this.scene.popMatrix();

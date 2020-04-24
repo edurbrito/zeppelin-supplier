@@ -47,18 +47,19 @@ class MyScene extends CGFscene {
         this.incompleteSphere = new MySphere(this, 16, 8);
         this.cylinder = new MyCylinder(this,30,10);
         this.vehicle = new MyVehicle(this);
-        this.terrain = new MyTerrain(this);
 
-        this.objects = [this.cylinder,this.incompleteSphere, this.vehicle, this.terrain];
+        this.objects = [this.cylinder,this.incompleteSphere, this.vehicle];
 
         // Labels and ID's for object selection on MyInterface
-        this.objectIDs = { 'Cylinder': 0 , 'Sphere': 1, 'Vehicle': 2, 'Terrain': 3};
+        this.objectIDs = { 'Cylinder': 0 , 'Sphere': 1, 'Vehicle': 2};
 
         // Labels and ID's for scene selection on MyInterface
         this.sceneIDs = { 'Scene1': 0 , 'Scene2': 1, 'Scene3': 2, 'Scene4': 3};
 
         // Objects connected to MyInterface
         this.cubeMap = new MyCubeMap(this);
+        this.terrain = new MyTerrain(this);
+
         this.selectedObject = 2;
         this.scaleFactor = 1;
         this.speedFactor = 1;
@@ -76,7 +77,7 @@ class MyScene extends CGFscene {
     }
 
     initCameras() {
-        this.camera = new CGFcamera(0.4, 0.1, 500, vec3.fromValues(40, 40, 40), vec3.fromValues(0, 0, 0));
+        this.camera = new CGFcamera(0.4, 0.1, 500, vec3.fromValues(45, 45, 45), vec3.fromValues(0, 0, 0));
     }
 
     setDefaultAppearance() {
@@ -206,8 +207,8 @@ class MyScene extends CGFscene {
         //------
 
         //------ Plane Body Material
-        this.planeMaterial1.setAmbient(1.0, 1.0, 1.0, 1);
-        this.planeMaterial1.setDiffuse(0.0, 0.0, 0.0, 1);
+        this.planeMaterial1.setAmbient(0.6, 0.6, 0.6, 1);
+        this.planeMaterial1.setDiffuse(0.9, 0.9, 0.9, 1);
         this.planeMaterial1.setSpecular(0.0, 0.0, 0.0, 1);
         this.planeMaterial1.setShininess(10.0);
         this.planeMaterial1.loadTexture('images/planeElementTex.jpg');
@@ -215,24 +216,23 @@ class MyScene extends CGFscene {
         //------
 
         //------ Plane Wing Material
-        this.planeMaterial2.setAmbient(1.0, 1.0, 1.0, 1);
-        this.planeMaterial2.setDiffuse(0.0, 0.0, 0.0, 1);
-        this.planeMaterial2.setSpecular(0.0, 0.0, 0.0, 1);
-        this.planeMaterial2.setShininess(10.0);
+        this.planeMaterial2.setAmbient(0.9, 0.9, 0.9, 1);
+        this.planeMaterial2.setDiffuse(0.9, 0.9, 0.9, 1);
+        this.planeMaterial2.setSpecular(0.9, 0.9, 0.9, 1);
+        this.planeMaterial2.setShininess(100.0);
         this.planeMaterial2.loadTexture('images/metalTex.jpg');
         this.planeMaterial2.setTextureWrap('REPEAT', 'REPEAT');
         //------
 
          //------ Plane Red Material
-         this.planeMaterial3.setAmbient(1.0, 1.0, 1.0, 1);
-         this.planeMaterial3.setDiffuse(0.0, 0.0, 0.0, 1);
-         this.planeMaterial3.setSpecular(0.0, 0.0, 0.0, 1);
+         this.planeMaterial3.setAmbient(0.1, 0.1, 0.1, 1);
+         this.planeMaterial3.setDiffuse(0.9, 0.9, 0.9, 1);
+         this.planeMaterial3.setSpecular(0.9, 0.9, 0.9, 1);
          this.planeMaterial3.setShininess(10.0);
          this.planeMaterial3.loadTexture('images/redTex.jpg');
          this.planeMaterial3.setTextureWrap('REPEAT', 'REPEAT');
          //------
  
-
     }
 
     display() {
@@ -273,16 +273,12 @@ class MyScene extends CGFscene {
             this.scale(this.scaleFactor,this.scaleFactor,this.scaleFactor); // Vehicle Object Scale
             this.translate(-this.vehicle.x, -this.vehicle.y, -this.vehicle.z);
         }
-        else{
-            this.pushMatrix();
-            this.terrainMaterial.apply();
-            this.setActiveShader(this.terrainShader);
-            this.terrainTextureH.bind(1);
-        }
        
         this.objects[this.selectedObject].display();
         
-        if(this.selectedObject >= 2) this.popMatrix(); // Vehicle Object Scale
+        if(this.selectedObject == 2) this.popMatrix(); // Vehicle Object Scale
+
+        this.terrain.display();
 
         this.setActiveShader(this.defaultShader);
         this.cubeMap.display();

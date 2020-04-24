@@ -119,8 +119,24 @@ class MyVehicle extends CGFobject {
     }
 }
 
-class Cabin {
+class NormalVisualizer {
+
+    enableNormalViz(){
+        for(var i = 0; i < this.objects.length; i++){
+            this.objects[i].enableNormalViz();
+        }
+    }
+
+    disableNormalViz(){
+        for(var i = 0; i < this.objects.length; i++){
+            this.objects[i].disableNormalViz();
+        }
+    }
+}
+
+class Cabin extends NormalVisualizer{
     constructor(scene){
+        super(); // NormalVisualizer
         this.scene = scene;
         this.cabinSphere = new MySphere(this.scene,16,8);
         this.cabinBody = new MyCylinder(this.scene,16,8);
@@ -148,23 +164,13 @@ class Cabin {
             factor = -1;
         }
     }
-
-    enableNormalViz(){
-        for(var i = 0; i < this.objects.length; i++){
-            this.objects[i].enableNormalViz();
-        }
-    }
-
-    disableNormalViz(){
-        for(var i = 0; i < this.objects.length; i++){
-            this.objects[i].disableNormalViz();
-        }
-    }
 }
 
-class Motor {
+class Motor extends NormalVisualizer{
     constructor(scene){
+        super(); // NormalVisualizer
         this.scene = scene;
+        
         this.round = new MySphere(this.scene,16,8);
         this.turbine = new MyCylinder(this.scene,16,8);
         
@@ -210,21 +216,9 @@ class Motor {
 
         this.turbineRot = (this.turbineRot + formulae(speed*100));
     }
-
-    enableNormalViz(){
-        for(var i = 0; i < this.objects.length; i++){
-            this.objects[i].enableNormalViz();
-        }
-    }
-
-    disableNormalViz(){
-        for(var i = 0; i < this.objects.length; i++){
-            this.objects[i].disableNormalViz();
-        }
-    }
 }
 
-class WingObject extends CGFobject {
+class WingObject extends CGFobject{
     constructor(scene) {
 		super(scene);
 		this.initBuffers();
@@ -270,15 +264,18 @@ class WingObject extends CGFobject {
 		this.primitiveType = this.scene.gl.TRIANGLES;
 
 		this.initGLBuffers();
-	}
+    }
 }
 
-class Wing {
+class Wing extends NormalVisualizer {
     constructor(scene){
+        super(); // NormalVisualizer
         this.scene = scene;
 
         this.wing = new WingObject(this.scene);
         this.wingRot = 0;
+
+        this.objects = [this.wing];
     }
 
     display(){
@@ -301,13 +298,4 @@ class Wing {
         else
             this.wingRot = Math.min(this.wingRot + turn, -30);
     }
-
-    enableNormalViz(){
-        this.wing.enableNormalViz();
-    }
-
-    disableNormalViz(){
-        this.wing.disableNormalViz();
-    }
 }
-
