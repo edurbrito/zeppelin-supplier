@@ -70,14 +70,16 @@ class MyScene extends CGFscene {
 
     initLights() {
         this.lights[0].setPosition(15, 2, 5, 1);
-        this.lights[0].setAmbient(0.2, 0.2, 0.2, 1.0);
         this.lights[0].setDiffuse(1.0, 1.0, 1.0, 1.0);
         this.lights[0].enable();
         this.lights[0].update();
+
+        this.lights[1].setPosition(0, 0,0, 0);
+        this.lights[1].setAmbient(0.7, 0.7, 0.7, 1.0);
     }
 
     initCameras() {
-        this.camera = new CGFcamera(0.4, 0.1, 500, vec3.fromValues(45, 45, 45), vec3.fromValues(0, 0, 0));
+        this.camera = new CGFcamera(0.4, 0.1, 500, vec3.fromValues(50, 25, 50), vec3.fromValues(0, 0, 0));
     }
 
     setDefaultAppearance() {
@@ -281,7 +283,15 @@ class MyScene extends CGFscene {
         this.terrain.display();
 
         this.setActiveShader(this.defaultShader);
+
+        this.pushMatrix();
+        this.lights[1].enable();
+        this.lights[1].update();
         this.cubeMap.display();
+        this.lights[1].disable();
+        this.lights[1].update();
+        this.popMatrix();
+
         
         // ---- END Primitive drawing section
     }
