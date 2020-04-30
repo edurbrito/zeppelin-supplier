@@ -69,22 +69,36 @@ class MyVehicle extends CGFobject {
     }
 
     update(t){
-        this.x += this.speed * Math.sin(graToRad(this.angle));
-        this.z += this.speed * Math.cos(graToRad(this.angle));
         
-        this.motor.update(this.speed);
-
         if(this.autoPilot){
-           this.speed = 2 * Math.PI * 0.085;  // Factor 0.085 assures the correctness of the approximate values, being the the maximum closer to what is expected, despite oscillations of t
-           this.turn( (t-this.last_t) * (2 * Math.PI / 5.0) * 0.055 ); // Factor 0.055 assures the correctness of the approximate values, being the the maximum closer to what is expected, despite oscillations of t
+            var deltaAngle = (t - this.last_t) * this.angularSpeed;
+            this.pilotAngle += deltaAngle; // rotation angle
+
+            this.x = this.pilotCenter[0] + this.pilotRadius * Math.sin(graToRad(this.pilotAngle));
+            this.z = this.pilotCenter[2] + this.pilotRadius * Math.cos(graToRad(this.pilotAngle));
+            
+            this.angle = this.pilotAngle + 90; // orientation angle
+
+            // Animations
+            this.motor.update(this.angularSpeed * this.pilotRadius);
+            this.vWingUp.update(this.pilotAngle);
+            this.vWingDown.update(-this.pilotAngle);
         }
+        else{ // Normal State
+            this.x += this.speed * Math.sin(graToRad(this.angle));
+            this.z += this.speed * Math.cos(graToRad(this.angle));
+
+            // Animations
+            this.motor.update(this.speed);
+        }
+
         this.last_t = t;
     }
 
     turn(val){
         this.angle += val;
-        this.vWingDown.update(-val);
         this.vWingUp.update(val);
+        this.vWingDown.update(-val);
     }
 
     accelerate(val){
@@ -93,8 +107,25 @@ class MyVehicle extends CGFobject {
     }
 
     setAutoPilot(){
-        if(this.autoPilot) this.autoPilot = false;
-        else this.autoPilot = true;
+        this.autoPilot = !this.autoPilot;
+        
+        if(this.autoPilot){
+            this.pilotRadius = 5;
+            this.pilotPeriod = 5000; // milliseconds         
+            this.pilotAngle = this.angle - 90;
+            
+            var pilotInitialPosition = [this.x,this.y,this.z];  
+            var relativeDirection = [ Math.sin(graToRad(this.angle + 90)), 0, Math.cos(graToRad(this.angle + 90))];
+            
+            this.pilotCenter = [0,0,0];
+
+            for(var i = 0; i < 3 ; i++)
+                this.pilotCenter[i] = relativeDirection[i] * this.pilotRadius + pilotInitialPosition[i];
+
+            this.angularSpeed = 360 / this.pilotPeriod;     
+
+        }
+        
     }
 
     reset(){
@@ -294,8 +325,8 @@ class Wing extends NormalVisualizer {
 
     update(turn){
         if(turn < 0)
-            this.wingRot = Math.max(this.wingRot + turn, 30);
+            this.wingRot = Math.max(this.wingRot + turn, -30);
         else
-            this.wingRot = Math.min(this.wingRot + turn, -30);
+            this.wingRot = Math.min(this.wingRot + turn, 30);
     }
 }
