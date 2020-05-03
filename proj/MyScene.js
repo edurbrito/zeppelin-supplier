@@ -35,21 +35,25 @@ class MyScene extends CGFscene {
         this.incompleteSphere = new MySphere(this, 16, 8);
         this.cylinder = new MyCylinder(this,30,10);
         this.vehicle = new MyVehicle(this);
-        this.supply = new MySupply(this);
+        this.supplies = new Array();
+        this.nSuppliesDelivered = 0;
+        this.nSupplies = 5;
+        for (var i = 0; i < this.nSupplies; i++)
+            this.supplies.push(new MySupply(this));
 
-        this.objects = [this.cylinder,this.incompleteSphere, this.vehicle, this.supply];
+        this.objects = [this.cylinder,this.incompleteSphere, this.vehicle];
 
         // Labels and ID's for object selection on MyInterface
-        this.objectIDs = { 'Cylinder': 0 , 'Sphere': 1, 'Vehicle': 2, 'Supply': 3};
+        this.objectIDs = { 'Cylinder': 0 , 'Sphere': 1, 'Vehicle': 2};
 
         // Labels and ID's for scene selection on MyInterface
-        this.sceneIDs = { 'Scene1': 0 , 'Scene2': 1, 'Scene3': 2, 'Scene4': 3};
+        this.sceneIDs = { 'Scene1': 0 , 'Scene2': 1, 'Scene3': 2};
 
         // Objects connected to MyInterface
         this.cubeMap = new MyCubeMap(this);
         this.terrain = new MyTerrain(this);
 
-        this.selectedObject = 3;
+        this.selectedObject = 2;
         this.scaleFactor = 1;
         this.speedFactor = 1;
         this.selectedScene = 0;
@@ -68,7 +72,7 @@ class MyScene extends CGFscene {
     }
 
     initCameras() {
-        this.camera = new CGFcamera(0.4, 0.1, 500, vec3.fromValues(50, 25, 50), vec3.fromValues(0, 0, 0));
+        this.camera = new CGFcamera(0.4, 0.1, 500, vec3.fromValues(50, 38, 50), vec3.fromValues(0, 15, 0));
     }
 
     setDefaultAppearance() {
@@ -88,12 +92,12 @@ class MyScene extends CGFscene {
         if(!this.vehicle.autoPilot){
             if (this.gui.isKeyPressed("KeyW")) {
                 text += " W ";
-                this.vehicle.accelerate(0.3 * this.speedFactor);
+                this.vehicle.accelerate(0.6 * this.speedFactor);
                 keysPressed=true;
             }
             if (this.gui.isKeyPressed("KeyS")) {
                 text += " S ";
-                this.vehicle.accelerate(-0.3 * this.speedFactor);
+                this.vehicle.accelerate(-0.6 * this.speedFactor);
                 keysPressed = true;
             }
             if (this.gui.isKeyPressed("KeyA")) {
@@ -118,6 +122,14 @@ class MyScene extends CGFscene {
             this.vehicle.setAutoPilot();
             keysPressed = true;
         }
+        if (this.gui.isKeyPressed("KeyL")) {
+            text += " L ";
+            if(this.nSuppliesDelivered < 5){
+                this.supplies[this.nSuppliesDelivered].drop([this.vehicle.x,this.vehicle.y, this.vehicle.z]);
+                this.nSuppliesDelivered++;
+            }
+            keysPressed = true;
+        }
         if (keysPressed){
             console.log(text);
         }
@@ -125,9 +137,19 @@ class MyScene extends CGFscene {
 
     // Called periodically (as per setUpdatePeriod() in init())
     update(t){
-        //To be done...
-        this.checkKeys();
-        this.vehicle.update(t);
+        
+        if(this.selectedObject == 2){
+            this.checkKeys();
+            this.vehicle.update(t);
+
+            // Update supplies
+            for(var i = 0; i < this.nSupplies; i++){
+                this.supplies[i].update(t);
+            }
+        }
+        else{
+            this.vehicle.reset();
+        }
     }
 
     loadMaterials(){
@@ -290,7 +312,14 @@ class MyScene extends CGFscene {
        
         this.objects[this.selectedObject].display();
         
-        if(this.selectedObject == 2) this.popMatrix(); // Vehicle Object Scale
+        if(this.selectedObject == 2){
+            // Display supplies
+            for(var i = 0; i < this.nSupplies; i++){
+                this.supplies[i].display();
+            }
+
+            this.popMatrix(); // Vehicle Object Scale
+        }
 
         this.terrain.display();
 
