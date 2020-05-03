@@ -53,4 +53,12 @@ class MyCubeMap extends CGFobject {
 
         this.scene.popMatrix();
     }
+
+    enableNormalViz(){
+        this.face.enableNormalViz();
+     }
+  
+    disableNormalViz(){
+     this.face.disableNormalViz();
+    }
 }

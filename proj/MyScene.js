@@ -23,18 +23,6 @@ class MyScene extends CGFscene {
         
         this.enableTextures(true);
 
-        // Initialize scene materials      
-        this.cylinderMaterial = new CGFappearance(this);
-        this.earthMaterial = new CGFappearance(this);
-        this.scene1Material = new CGFappearance(this);
-        this.scene2Material = new CGFappearance(this);
-        this.scene3Material = new CGFappearance(this);
-        this.scene4Material = new CGFappearance(this);
-        this.planeMaterial1 = new CGFappearance(this);     
-        this.planeMaterial2 = new CGFappearance(this);  
-        this.planeMaterial3 = new CGFappearance(this);        
-        this.terrainMaterial = new CGFappearance(this);
-
         this.loadMaterials();
 
         this.terrainShader = new CGFshader(this.gl, "terrain.vert", "terrain.frag");
@@ -47,11 +35,12 @@ class MyScene extends CGFscene {
         this.incompleteSphere = new MySphere(this, 16, 8);
         this.cylinder = new MyCylinder(this,30,10);
         this.vehicle = new MyVehicle(this);
+        this.supply = new MySupply(this);
 
-        this.objects = [this.cylinder,this.incompleteSphere, this.vehicle];
+        this.objects = [this.cylinder,this.incompleteSphere, this.vehicle, this.supply];
 
         // Labels and ID's for object selection on MyInterface
-        this.objectIDs = { 'Cylinder': 0 , 'Sphere': 1, 'Vehicle': 2};
+        this.objectIDs = { 'Cylinder': 0 , 'Sphere': 1, 'Vehicle': 2, 'Supply': 3};
 
         // Labels and ID's for scene selection on MyInterface
         this.sceneIDs = { 'Scene1': 0 , 'Scene2': 1, 'Scene3': 2, 'Scene4': 3};
@@ -60,7 +49,7 @@ class MyScene extends CGFscene {
         this.cubeMap = new MyCubeMap(this);
         this.terrain = new MyTerrain(this);
 
-        this.selectedObject = 2;
+        this.selectedObject = 3;
         this.scaleFactor = 1;
         this.speedFactor = 1;
         this.selectedScene = 0;
@@ -142,7 +131,11 @@ class MyScene extends CGFscene {
     }
 
     loadMaterials(){
+
+        // Initialize scene materials             
+
         //------ Cylinder Material
+        this.cylinderMaterial = new CGFappearance(this);
         this.cylinderMaterial.setAmbient(0.1, 0.1, 0.1, 1);
         this.cylinderMaterial.setDiffuse(0.9, 0.9, 0.9, 1);
         this.cylinderMaterial.setSpecular(0.1, 0.1, 0.1, 1);
@@ -152,6 +145,7 @@ class MyScene extends CGFscene {
         //------
 
         //------ World Material
+        this.earthMaterial = new CGFappearance(this);
         this.earthMaterial.setAmbient(0.1, 0.1, 0.1, 1);
         this.earthMaterial.setDiffuse(0.9, 0.9, 0.9, 1);
         this.earthMaterial.setSpecular(0.1, 0.1, 0.1, 1);
@@ -161,6 +155,7 @@ class MyScene extends CGFscene {
         //------
 
         //------ Scene 1 Material
+        this.scene1Material = new CGFappearance(this);
         this.scene1Material.setAmbient(1.0, 1.0, 1.0, 1);
         this.scene1Material.setDiffuse(0.0, 0.0, 0.0, 1);
         this.scene1Material.setSpecular(0.0, 0.0, 0.0, 1);
@@ -170,6 +165,7 @@ class MyScene extends CGFscene {
         //------
 
         //------ Scene 2 Material
+        this.scene2Material = new CGFappearance(this);
         this.scene2Material.setAmbient(1.0, 1.0, 1.0, 1);
         this.scene2Material.setDiffuse(0.0, 0.0, 0.0, 1);
         this.scene2Material.setSpecular(0.0, 0.0, 0.0, 1);
@@ -179,6 +175,7 @@ class MyScene extends CGFscene {
         //------
 
         //------ Scene 3 Material
+        this.scene3Material = new CGFappearance(this);
         this.scene3Material.setAmbient(1.0, 1.0, 1.0, 1);
         this.scene3Material.setDiffuse(0.0, 0.0, 0.0, 1);
         this.scene3Material.setSpecular(0.0, 0.0, 0.0, 1);
@@ -188,6 +185,7 @@ class MyScene extends CGFscene {
         //------
 
         //------ Scene 4 Material
+        this.scene4Material = new CGFappearance(this);
         this.scene4Material.setAmbient(1.0, 1.0, 1.0, 1);
         this.scene4Material.setDiffuse(0.0, 0.0, 0.0, 1);
         this.scene4Material.setSpecular(0.0, 0.0, 0.0, 1);
@@ -199,7 +197,8 @@ class MyScene extends CGFscene {
         //------ Terrain Material
         this.terrainTextureH = new CGFtexture(this, "images/heightmap.jpg");
         this.terrainTextureP = new CGFtexture(this, "images/terrain.jpg");
-
+    
+        this.terrainMaterial = new CGFappearance(this);
         this.terrainMaterial.setAmbient(0.3, 0.3, 0.3, 1);
 		this.terrainMaterial.setDiffuse(0.7, 0.7, 0.7, 1);
 		this.terrainMaterial.setSpecular(0.0, 0.0, 0.0, 1);
@@ -209,6 +208,7 @@ class MyScene extends CGFscene {
         //------
 
         //------ Plane Body Material
+        this.planeMaterial1 = new CGFappearance(this);       
         this.planeMaterial1.setAmbient(0.6, 0.6, 0.6, 1);
         this.planeMaterial1.setDiffuse(0.9, 0.9, 0.9, 1);
         this.planeMaterial1.setSpecular(0.0, 0.0, 0.0, 1);
@@ -218,6 +218,7 @@ class MyScene extends CGFscene {
         //------
 
         //------ Plane Wing Material
+        this.planeMaterial2 = new CGFappearance(this);  
         this.planeMaterial2.setAmbient(0.9, 0.9, 0.9, 1);
         this.planeMaterial2.setDiffuse(0.9, 0.9, 0.9, 1);
         this.planeMaterial2.setSpecular(0.9, 0.9, 0.9, 1);
@@ -226,14 +227,25 @@ class MyScene extends CGFscene {
         this.planeMaterial2.setTextureWrap('REPEAT', 'REPEAT');
         //------
 
-         //------ Plane Red Material
-         this.planeMaterial3.setAmbient(0.1, 0.1, 0.1, 1);
-         this.planeMaterial3.setDiffuse(0.9, 0.9, 0.9, 1);
-         this.planeMaterial3.setSpecular(0.9, 0.9, 0.9, 1);
-         this.planeMaterial3.setShininess(10.0);
-         this.planeMaterial3.loadTexture('images/redTex.jpg');
-         this.planeMaterial3.setTextureWrap('REPEAT', 'REPEAT');
-         //------
+        //------ Plane Red Material
+        this.planeMaterial3 = new CGFappearance(this);  
+        this.planeMaterial3.setAmbient(0.1, 0.1, 0.1, 1);
+        this.planeMaterial3.setDiffuse(0.9, 0.9, 0.9, 1);
+        this.planeMaterial3.setSpecular(0.9, 0.9, 0.9, 1);
+        this.planeMaterial3.setShininess(10.0);
+        this.planeMaterial3.loadTexture('images/redTex.jpg');
+        this.planeMaterial3.setTextureWrap('REPEAT', 'REPEAT');
+        //------
+
+        //------ Wood Box Material
+        this.woodMaterial = new CGFappearance(this);
+        this.woodMaterial.setAmbient(0.7, 0.55, 0.4, 1);
+        this.woodMaterial.setDiffuse(0.7, 0.55, 0.4, 1);
+        this.woodMaterial.setSpecular(0.2, 0.2, 0.2, 1);
+        this.woodMaterial.setShininess(10.0);
+        this.woodMaterial.loadTexture('images/woodCubeMap.jpg');
+        this.woodMaterial.setTextureWrap('REPEAT', 'REPEAT');
+        //------
  
     }
 
@@ -258,11 +270,11 @@ class MyScene extends CGFscene {
         
         if (this.displayNormals){
             this.objects[this.selectedObject].enableNormalViz();
-            this.cubeMap.face.enableNormalViz();
+            //this.cubeMap.face.enableNormalViz();
         }
-        else{
+        else if(!this.displayNormals){
             this.objects[this.selectedObject].disableNormalViz();
-            this.cubeMap.face.disableNormalViz();
+            //this.cubeMap.face.disableNormalViz();
         }
 
         if(this.selectedObject == 0)
