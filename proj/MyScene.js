@@ -115,6 +115,10 @@ class MyScene extends CGFscene {
         if (this.gui.isKeyPressed("KeyR")) {
             text += " R ";
             this.vehicle.reset();
+            for(var i = 0 ; i < this.nSupplies; i++){
+                this.supplies[i].reset();
+            }
+            this.nSuppliesDelivered = 0;
             keysPressed = true;
         }
         if (this.gui.isKeyPressed("KeyP")) {
@@ -149,6 +153,10 @@ class MyScene extends CGFscene {
         }
         else{
             this.vehicle.reset();
+            for(var i = 0 ; i < this.nSupplies; i++){
+                this.supplies[i].reset();
+            }
+            this.nSuppliesDelivered = 0;
         }
     }
 

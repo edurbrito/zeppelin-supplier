@@ -13,11 +13,14 @@ const SupplyStates = {
 class MySupply extends CGFobject {
 	constructor(scene) {
         super(scene);
+
+        this.face = new MyQuad(this.scene);
         
         this.side = 1;
-        this.gravity = 60;
+        this.gravity = -98;
+        this.last_t = 0;
+        this.last_v = 0;
         this.dropPosition = [this.x, this.y, this.z];
-        this.face = new MyQuad(this.scene);
         this.state = SupplyStates.INACTIVE;
    }
    
@@ -31,14 +34,16 @@ class MySupply extends CGFobject {
    }
 
    update(t){
-      t = t / 1000
+      var delta_t = (t-this.last_t)/1000; // Time in seconds
+
       if(this.state == SupplyStates.FALLING && this.dropPosition[1] > this.side/2){
-         this.dropPosition[1] = this.dropPosition[1] - 0.5 * this.gravity * Math.pow(t-this.last_t, 2);
+         this.dropPosition[1] = this.dropPosition[1]  + this.last_v * delta_t + 0.5 * this.gravity * Math.pow(delta_t, 2);
       }
       else if(this.state == SupplyStates.LANDED){
          this.land();
       }
       this.last_t = t;
+      this.last_v += this.gravity * (t-this.last_t);
    }
 
    drop(dropPosition){
@@ -101,6 +106,10 @@ class MySupply extends CGFobject {
       }
 
       this.scene.popMatrix();
+   }
+
+   reset(){
+      this.state = SupplyStates.INACTIVE;
    }
 
    
