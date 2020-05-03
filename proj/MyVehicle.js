@@ -85,8 +85,8 @@ class MyVehicle extends CGFobject {
             this.vWingDown.update(-this.pilotAngle);
         }
         else{ // Normal State
-            this.x += this.speed * Math.sin(graToRad(this.angle));
-            this.z += this.speed * Math.cos(graToRad(this.angle));
+            this.x += this.speed * (t - this.last_t)/1000 * Math.sin(graToRad(this.angle));
+            this.z += this.speed * (t - this.last_t)/1000 * Math.cos(graToRad(this.angle));
 
             // Animations
             this.motor.update(this.speed);

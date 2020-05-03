@@ -1,6 +1,7 @@
-class MyTerrain extends MyPlane{
+class MyTerrain extends CGFobject{
    constructor(scene) {
-      super(scene,20);
+      super(scene);
+      this.plane = new MyPlane(scene,20);
   }
 
    display() {
@@ -8,7 +9,7 @@ class MyTerrain extends MyPlane{
       this.scene.translate(0,-24.9,0);
       this.scene.scale(50,50,50);
       this.scene.rotate(-Math.PI / 2,1,0,0);
-      super.display();
+      this.plane.display();
       this.scene.popMatrix();
    }
 

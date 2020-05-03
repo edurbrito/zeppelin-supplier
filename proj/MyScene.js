@@ -33,7 +33,7 @@ class MyScene extends CGFscene {
         this.planeMaterial1 = new CGFappearance(this);     
         this.planeMaterial2 = new CGFappearance(this);  
         this.planeMaterial3 = new CGFappearance(this);        
-		this.terrainMaterial = new CGFappearance(this);
+        this.terrainMaterial = new CGFappearance(this);
 
         this.loadMaterials();
 
@@ -99,12 +99,12 @@ class MyScene extends CGFscene {
         if(!this.vehicle.autoPilot){
             if (this.gui.isKeyPressed("KeyW")) {
                 text += " W ";
-                this.vehicle.accelerate(0.2 * this.speedFactor);
+                this.vehicle.accelerate(0.3 * this.speedFactor);
                 keysPressed=true;
             }
             if (this.gui.isKeyPressed("KeyS")) {
                 text += " S ";
-                this.vehicle.accelerate(-0.2 * this.speedFactor);
+                this.vehicle.accelerate(-0.3 * this.speedFactor);
                 keysPressed = true;
             }
             if (this.gui.isKeyPressed("KeyA")) {
