@@ -17,9 +17,8 @@ class MySupply extends CGFobject {
         this.face = new MyQuad(this.scene);
         
         this.side = 1;
-        this.gravity = -98;
+        this.gravity = -700;
         this.last_t = 0;
-        this.last_v = 0;
         this.dropPosition = [this.x, this.y, this.z];
         this.state = SupplyStates.INACTIVE;
    }
@@ -34,16 +33,20 @@ class MySupply extends CGFobject {
    }
 
    update(t){
-      var delta_t = (t-this.last_t)/1000; // Time in seconds
+   
+      this.delta_t = (t-this.last_t)/1000; // Time in seconds
 
-      if(this.state == SupplyStates.FALLING && this.dropPosition[1] > this.side/2){
-         this.dropPosition[1] = this.dropPosition[1]  + this.last_v * delta_t + 0.5 * this.gravity * Math.pow(delta_t, 2);
-      }
-      else if(this.state == SupplyStates.LANDED){
-         this.land();
-      }
+      if(this.state == SupplyStates.FALLING){
+         this.dropPosition[1] += 0.5 * this.gravity * Math.pow(this.delta_t, 2);
+
+         // Y = 0 >> End falling animation and start landing
+         if(this.dropPosition[1] <= this.side/2){
+            this.dropPosition[1] = this.side/2;
+            this.land();
+         }
+
+      }  
       this.last_t = t;
-      this.last_v += this.gravity * (t-this.last_t);
    }
 
    drop(dropPosition){
@@ -54,9 +57,7 @@ class MySupply extends CGFobject {
    }
 
    land(){
-      if(this.y == 0){
-         this.state = LANDED;
-      }
+      this.state = SupplyStates.LANDED;
    }
 
    displayFalling(){
@@ -118,6 +119,7 @@ class MySupply extends CGFobject {
 
       this.scene.pushMatrix();
       this.scene.scale(this.side,this.side,this.side);
+      this.scene.translate(this.dropPosition[0],this.dropPosition[1],this.dropPosition[2]);
 
       var angY = -180;
       var angX = -90;
