@@ -348,37 +348,37 @@ class Flag extends NormalVisualizer {
         this.scene = scene;
 
         this.flag = new MyPlane(this.scene,20);
-        this.rope = new MyCylinder(this.scene,20);
+        this.rope = new MyPlane(this.scene,20);
 
     }
 
     display(){
-
-        this.scene.pushMatrix();
-        this.scene.translate(0,1.8,-3.5);
-        this.scene.rotate(graToRad(90),1,0,0);
-        this.scene.scale(0.005,2.1,0.005);
-        this.scene.planeMaterial3.apply();
-        this.rope.display();
-        this.scene.popMatrix();
-
-        this.scene.pushMatrix();
-        this.scene.translate(0,0.4,-3.5);
-        this.scene.rotate(graToRad(90),1,0,0);
-        this.scene.scale(0.005,2.1,0.005);
-        this.scene.planeMaterial3.apply();
-        this.rope.display();
-        this.scene.popMatrix();
-
-        this.scene.pushMatrix();
         this.scene.flagMaterial.apply();
         this.scene.setActiveShader(this.scene.flagShader);
         this.scene.flagTexture.bind(0);
+
+        this.scene.pushMatrix();
         this.scene.translate(0,1.1,-5);
         this.scene.rotate(graToRad(90),0,1,0);
         this.scene.scale(3,1.5,1);
         this.flag.display();
         this.scene.popMatrix();  
+
+        this.scene.pushMatrix();
+        this.scene.translate(0,1.8,-2.25);
+        this.scene.rotate(graToRad(90),0,1,0);
+        this.scene.scale(2.5,0.01,1);
+        this.scene.planeMaterial3.apply();
+        this.rope.display();
+        this.scene.popMatrix();
+
+        this.scene.pushMatrix();
+        this.scene.translate(0,0.4,-2.25);
+        this.scene.rotate(graToRad(90),0,1,0);
+        this.scene.scale(2.5,0.01,1);
+        this.scene.planeMaterial3.apply();
+        this.rope.display();
+        this.scene.popMatrix();
 
     }
 
