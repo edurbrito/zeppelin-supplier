@@ -33,12 +33,17 @@ class MyScene extends CGFscene {
         this.planeMaterial1 = new CGFappearance(this);     
         this.planeMaterial2 = new CGFappearance(this);  
         this.planeMaterial3 = new CGFappearance(this);        
-		this.terrainMaterial = new CGFappearance(this);
+        this.terrainMaterial = new CGFappearance(this);
+        this.flagMaterial = new CGFappearance(this);
 
         this.loadMaterials();
 
         this.terrainShader = new CGFshader(this.gl, "terrain.vert", "terrain.frag");
         this.terrainShader.setUniformsValues({ uSampler2: 1 });
+
+        this.flagShader = new CGFshader(this.gl, "flag.vert", "flag.frag");
+        this.flagShader.setUniformsValues({ speedFactor: 0 });
+        this.flagShader.setUniformsValues({ timeFactor: 0 });
 
         this.scenes = [this.scene1Material,this.scene2Material, this.scene3Material, this.scene4Material];
 
@@ -234,6 +239,17 @@ class MyScene extends CGFscene {
          this.planeMaterial3.loadTexture('images/redTex.jpg');
          this.planeMaterial3.setTextureWrap('REPEAT', 'REPEAT');
          //------
+
+         //------ Flag Material
+
+        this.flagTexture = new CGFtexture(this, "images/flag.jpeg");
+
+        this.flagMaterial.setAmbient(0.3, 0.3, 0.3, 1);
+		this.flagMaterial.setDiffuse(0.7, 0.7, 0.7, 1);
+		this.flagMaterial.setSpecular(0.0, 0.0, 0.0, 1);
+        this.flagMaterial.setShininess(120);
+        this.flagMaterial.setTexture(this.flagTexture);
+        this.flagMaterial.setTextureWrap('REPEAT', 'REPEAT');
  
     }
 
