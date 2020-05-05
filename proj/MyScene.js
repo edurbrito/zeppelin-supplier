@@ -25,11 +25,6 @@ class MyScene extends CGFscene {
 
         this.loadMaterials();
 
-        this.terrainShader = new CGFshader(this.gl, "terrain.vert", "terrain.frag");
-        this.terrainShader.setUniformsValues({ uSampler2: 1 });
-
-        this.scenes = [this.scene1Material,this.scene2Material, this.scene3Material, this.scene4Material];
-
         // Initialize scene objects
         this.axis = new CGFaxis(this);
         this.incompleteSphere = new MySphere(this, 16, 8);
@@ -276,6 +271,11 @@ class MyScene extends CGFscene {
         this.woodMaterial.loadTexture('images/woodCubeMap.jpg');
         this.woodMaterial.setTextureWrap('REPEAT', 'REPEAT');
         //------
+
+        this.terrainShader = new CGFshader(this.gl, "terrain.vert", "terrain.frag");
+        this.terrainShader.setUniformsValues({ uSampler2: 1 });
+
+        this.scenes = [this.scene1Material,this.scene2Material, this.scene3Material, this.scene4Material];
  
     }
 

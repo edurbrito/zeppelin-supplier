@@ -17,8 +17,8 @@ class MySupply extends CGFobject {
         this.face = new MyQuad(this.scene);
         
         this.side = 1;
-        this.gravity = -700;
         this.last_t = 0;
+        this.speed = - 10/3
         this.dropPosition = [this.x, this.y, this.z];
         this.state = SupplyStates.INACTIVE;
    }
@@ -37,7 +37,7 @@ class MySupply extends CGFobject {
       this.delta_t = (t-this.last_t)/1000; // Time in seconds
 
       if(this.state == SupplyStates.FALLING){
-         this.dropPosition[1] += 0.5 * this.gravity * Math.pow(this.delta_t, 2);
+         this.dropPosition[1] += this.speed * (t - this.last_t)/1000
 
          // Y = 0 >> End falling animation and start landing
          if(this.dropPosition[1] <= this.side/2){
