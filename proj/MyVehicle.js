@@ -23,7 +23,7 @@ class MyVehicle extends CGFobject {
         this.hWing = new Wing(this.scene);
         this.flag = new Flag(this.scene);
 
-        this.objects = [this.body, this.cabin, this.motor, this.vWingDown, this.vWingUp, this.hWing];
+        this.objects = [this.body, this.cabin, this.motor, this.vWingDown, this.vWingUp, this.hWing, this.flag];
     }
     
     display(){
@@ -95,8 +95,8 @@ class MyVehicle extends CGFobject {
             this.flag.update(t, this.angularSpeed * this.pilotRadius);
         }
         else{ // Normal State
-            this.x += this.speed * Math.sin(graToRad(this.angle));
-            this.z += this.speed * Math.cos(graToRad(this.angle));
+            // this.x += this.speed * Math.sin(graToRad(this.angle));
+            // this.z += this.speed * Math.cos(graToRad(this.angle));
 
             // Animations
             this.motor.update(this.speed);
@@ -252,7 +252,7 @@ class Motor extends NormalVisualizer{
                 return 10*Math.pow(x,1/3.0);
             } 
             else {
-                return -1 *10*Math.pow(-x,1/3.0);
+                return 10;
             }            
         }
 
@@ -350,13 +350,14 @@ class Flag extends NormalVisualizer {
         this.flag = new MyPlane(this.scene,20);
         this.rope = new MyPlane(this.scene,20);
 
+        this.objects = [this.flag, this.rope];
     }
 
     display(){
         this.scene.flagMaterial.apply();
         this.scene.setActiveShader(this.scene.flagShader);
         this.scene.flagTexture.bind(0);
-
+        
         this.scene.pushMatrix();
         this.scene.translate(0,1.1,-5);
         this.scene.rotate(graToRad(90),0,1,0);
