@@ -56,7 +56,8 @@ class MySupply extends CGFobject {
       this.dropPosition[1] = dropPosition[1];
       this.dropPosition[2] = dropPosition[2];
 
-      this.speed = - this.dropPosition[1] / this.fallTime;
+      var distance = (this.dropPosition[1] - this.side / 2);
+      this.speed = - distance / this.fallTime;
    }
 
    land(){

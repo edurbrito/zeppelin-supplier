@@ -31,10 +31,13 @@ class MyScene extends CGFscene {
         this.cylinder = new MyCylinder(this,30,10);
         this.vehicle = new MyVehicle(this);
         this.supplies = new Array();
+        this.billboard = new MyBillboard(this);
         this.nSuppliesDelivered = 0;
         this.nSupplies = 5;
+
         for (var i = 0; i < this.nSupplies; i++)
             this.supplies.push(new MySupply(this));
+
 
         this.objects = [this.cylinder,this.incompleteSphere, this.vehicle];
 
@@ -123,7 +126,7 @@ class MyScene extends CGFscene {
         }
         if (this.gui.isKeyPressed("KeyL")) {
             text += " L ";
-            if(this.nSuppliesDelivered < 5){
+            if(this.nSuppliesDelivered < this.nSupplies){
                 this.supplies[this.nSuppliesDelivered].drop([this.vehicle.x,this.vehicle.y, this.vehicle.z]);
                 this.nSuppliesDelivered++;
             }
@@ -272,6 +275,26 @@ class MyScene extends CGFscene {
         this.woodMaterial.setTextureWrap('REPEAT', 'REPEAT');
         //------
 
+        //------ Billboard Material
+        this.billboardMaterial = new CGFappearance(this);
+        this.planeMaterial2.setAmbient(0.9, 0.9, 0.9, 1);
+        this.planeMaterial2.setDiffuse(0.9, 0.9, 0.9, 1);
+        this.planeMaterial2.setSpecular(0.9, 0.9, 0.9, 1);
+        this.planeMaterial2.setShininess(10.0);
+        this.billboardMaterial.loadTexture('images/billboard.jpg');
+        this.billboardMaterial.setTextureWrap('REPEAT', 'REPEAT');
+        //------
+
+        //------ Billboard Bar Material
+        this.barMaterial = new CGFappearance(this);
+        this.planeMaterial2.setAmbient(0.9, 0.9, 0.9, 1);
+        this.planeMaterial2.setDiffuse(0.9, 0.9, 0.9, 1);
+        this.planeMaterial2.setSpecular(0.9, 0.9, 0.9, 1);
+        this.planeMaterial2.setShininess(10.0);
+        this.barMaterial.loadTexture('images/bar.jpg');
+        this.barMaterial.setTextureWrap('REPEAT', 'REPEAT');
+        //------
+
         this.terrainShader = new CGFshader(this.gl, "terrain.vert", "terrain.frag");
         this.terrainShader.setUniformsValues({ uSampler2: 1 });
 
@@ -307,6 +330,7 @@ class MyScene extends CGFscene {
             //this.cubeMap.face.disableNormalViz();
         }
 
+
         if(this.selectedObject == 0)
             this.cylinderMaterial.apply();
         else if(this.selectedObject == 1)
@@ -317,18 +341,19 @@ class MyScene extends CGFscene {
             this.scale(this.scaleFactor,this.scaleFactor,this.scaleFactor); // Vehicle Object Scale
             this.translate(-this.vehicle.x, -this.vehicle.y, -this.vehicle.z);
         }
-       
+        
         this.objects[this.selectedObject].display();
         
         if(this.selectedObject == 2){
             // Display supplies
             for(var i = 0; i < this.nSupplies; i++){
                 this.supplies[i].display();
-            }
-
+            }   
             this.popMatrix(); // Vehicle Object Scale
         }
 
+        this.billboard.display();
+        
         this.terrain.display();
 
         this.setActiveShader(this.defaultShader);
@@ -340,7 +365,7 @@ class MyScene extends CGFscene {
         this.lights[1].disable();
         this.lights[1].update();
         this.popMatrix();
-
+        
         
         // ---- END Primitive drawing section
     }

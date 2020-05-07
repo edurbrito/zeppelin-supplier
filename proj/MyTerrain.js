@@ -1,16 +1,28 @@
-class MyTerrain extends CGFobject{
+class MyTerrain extends MyPlane{
    constructor(scene) {
-      super(scene);
-      this.plane = new MyPlane(scene,20);
+      super(scene,20);
   }
 
    display() {
+
       this.scene.pushMatrix();
+		
+		this.updateTexCoordsGLBuffers();
+		this.scene.terrainMaterial.apply();
+		this.scene.setActiveShader(this.scene.terrainShader);
+		this.scene.terrainTextureP.bind(0);
+      this.scene.terrainTextureH.bind(1);
+      
+		this.scene.pushMatrix();
       this.scene.translate(0,-0.05,0);
       this.scene.scale(50,50,50);
       this.scene.rotate(-Math.PI / 2,1,0,0);
-      this.plane.display();
+      super.display();
       this.scene.popMatrix();
+
+      this.scene.popMatrix();
+      
+      
    }
 
 }

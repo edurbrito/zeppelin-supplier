@@ -10,9 +10,8 @@ class MyCubeMap extends CGFobject {
         this.face = new MyQuad(this.scene);
 	}
 	display() {
-        this.scene.scenes[this.scene.selectedScene].apply();
-
         this.scene.pushMatrix();
+        this.scene.scenes[this.scene.selectedScene].apply();
         this.scene.translate(0,18,0);
         this.scene.scale(50,50,50);
 

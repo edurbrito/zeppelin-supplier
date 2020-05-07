@@ -62,18 +62,7 @@ class MyPlane extends CGFobject{
 	};
 
 	display() {
-		
-		this.scene.pushMatrix();
-		
-		this.updateTexCoordsGLBuffers();
-		this.scene.terrainMaterial.apply();
-		this.scene.setActiveShader(this.scene.terrainShader);
-		this.scene.terrainTextureP.bind(0);
-		this.scene.terrainTextureH.bind(1);
 		super.display();
-
-
-		this.scene.popMatrix();
   }
 }
 
