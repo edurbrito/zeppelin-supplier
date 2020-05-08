@@ -38,6 +38,9 @@ class MyScene extends CGFscene {
         for (var i = 0; i < this.nSupplies; i++)
             this.supplies.push(new MySupply(this));
 
+        this.last_supply_t = 0;
+        this.last_t = 0;
+
 
         this.objects = [this.cylinder,this.incompleteSphere, this.vehicle];
 
@@ -45,7 +48,7 @@ class MyScene extends CGFscene {
         this.objectIDs = { 'Cylinder': 0 , 'Sphere': 1, 'Vehicle': 2};
 
         // Labels and ID's for scene selection on MyInterface
-        this.sceneIDs = { 'Scene1': 0 , 'Scene2': 1, 'Scene3': 2};
+        this.sceneIDs = { 'Scene1': 0 , 'Scene2': 1, 'Scene3': 2, 'Scene4':3};
 
         // Objects connected to MyInterface
         this.cubeMap = new MyCubeMap(this);
@@ -124,11 +127,12 @@ class MyScene extends CGFscene {
             this.vehicle.setAutoPilot();
             keysPressed = true;
         }
-        if (this.gui.isKeyPressed("KeyL")) {
+        if (this.gui.isKeyPressed("KeyL")){
             text += " L ";
-            if(this.nSuppliesDelivered < this.nSupplies){
+            if(this.nSuppliesDelivered < this.nSupplies && this.last_supply_t > 100){
                 this.supplies[this.nSuppliesDelivered].drop([this.vehicle.x,this.vehicle.y, this.vehicle.z]);
                 this.nSuppliesDelivered++;
+                this.last_supply_t = 0;
             }
             keysPressed = true;
         }
@@ -148,6 +152,11 @@ class MyScene extends CGFscene {
             for(var i = 0; i < this.nSupplies; i++){
                 this.supplies[i].update(t);
             }
+            this.last_supply_t += t - this.last_t;
+            this.last_t = t;
+
+            this.billboardShader.setUniformsValues({ deliveredSupplies: parseFloat(this.nSuppliesDelivered) });
+            this.billboardShader.setUniformsValues({ totalSupplies:  parseFloat(this.nSupplies) });
         }
         else{
             this.vehicle.reset();
@@ -155,6 +164,7 @@ class MyScene extends CGFscene {
                 this.supplies[i].reset();
             }
             this.nSuppliesDelivered = 0;
+            this.last_supply_t = 0;
         }
     }
 
@@ -295,10 +305,20 @@ class MyScene extends CGFscene {
         this.barMaterial.setTextureWrap('REPEAT', 'REPEAT');
         //------
 
+        //------ Terrain Shader
         this.terrainShader = new CGFshader(this.gl, "terrain.vert", "terrain.frag");
         this.terrainShader.setUniformsValues({ uSampler2: 1 });
+        //------
 
+        //------ Billboard Shader
+        this.billboardShader = new CGFshader(this.gl, "billboard.vert", "billboard.frag");
+        this.billboardShader.setUniformsValues({ deliveredSupplies: parseFloat(this.nSuppliesDelivered) });
+        this.billboardShader.setUniformsValues({ totalSupplies: parseFloat(this.nSupplies) });
+        //------
+
+        //------ Possible Scene Materials
         this.scenes = [this.scene1Material,this.scene2Material, this.scene3Material, this.scene4Material];
+        //------
  
     }
 
