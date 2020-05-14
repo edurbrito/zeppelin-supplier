@@ -317,12 +317,12 @@ class MyScene extends CGFscene {
         //------       
 
          //------ Flag Material
-        this.flagTexture = new CGFtexture(this, "images/flag.jpeg");
+        this.flagMaterial = new CGFappearance(this);
         this.flagMaterial.setAmbient(0.3, 0.3, 0.3, 1);
-
 		this.flagMaterial.setDiffuse(0.7, 0.7, 0.7, 1);
 		this.flagMaterial.setSpecular(0.0, 0.0, 0.0, 1);
         this.flagMaterial.setShininess(120);
+        this.flagTexture = new CGFtexture(this, "images/flag.jpeg");
         this.flagMaterial.setTexture(this.flagTexture);
         this.flagMaterial.setTextureWrap('REPEAT', 'REPEAT');
 
@@ -330,7 +330,6 @@ class MyScene extends CGFscene {
         this.flagShader.setUniformsValues({ speedFactor: 0 });
         this.flagShader.setUniformsValues({ timeFactor: 0 });
         //------
-
 
         //------ Possible Scene Materials
         this.scenes = [this.scene1Material,this.scene2Material, this.scene3Material, this.scene4Material];
@@ -364,7 +363,6 @@ class MyScene extends CGFscene {
             this.objects[this.selectedObject].disableNormalViz();
             //this.cubeMap.face.disableNormalViz();
         }
-
 
         if(this.selectedObject == 0)
             this.cylinderMaterial.apply();
