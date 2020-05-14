@@ -89,10 +89,10 @@ class MyVehicle extends CGFobject {
             this.angle = this.pilotAngle + 90; // orientation angle
 
             // Animations
-            this.motor.update(this.angularSpeed * this.pilotRadius);
+            this.motor.update(this.linearSpeed);
             this.vWingUp.update(this.pilotAngle);
             this.vWingDown.update(-this.pilotAngle);
-            this.flag.update(t, this.angularSpeed * this.pilotRadius);
+            this.flag.update(t, this.linearSpeed);
         }
         else{ // Normal State
             this.x += this.speed * (t - this.last_t)/1000 * Math.sin(graToRad(this.angle));
@@ -133,7 +133,9 @@ class MyVehicle extends CGFobject {
             for(var i = 0; i < 3 ; i++)
                 this.pilotCenter[i] = relativeDirection[i] * this.pilotRadius + pilotInitialPosition[i];
 
-            this.angularSpeed = 360 / this.pilotPeriod;     
+            this.angularSpeed = 360 / this.pilotPeriod; 
+            
+            this.linearSpeed = this.angularSpeed * this.pilotRadius;
 
         }
         
@@ -351,6 +353,9 @@ class Flag extends NormalVisualizer {
         this.rope = new MyPlane(this.scene,20);
 
         this.objects = [this.flag, this.rope];
+
+        this.last_t = 0;
+        this.phase = 0;
     }
 
     display(){
@@ -385,11 +390,15 @@ class Flag extends NormalVisualizer {
 
     update(t, speed){
 
-        function formulae(x){
-                return 1.5 * Math.pow(x,1/3.0);           
-        }
+        var deltaT = t - this.last_t;
+        var deltaX = 0.01 * speed * deltaT;
+        // If zero : swing slowly | else : not swing too rapidly
+        deltaX = deltaX == 0 ? 0.5 : Math.min(deltaX + 0.5, 2); 
 
-        this.scene.flagShader.setUniformsValues({ timeFactor: t / 100 % 1000 });
-        this.scene.flagShader.setUniformsValues({ speedFactor: formulae(speed) });
+        this.phase += deltaX;
+
+        this.scene.flagShader.setUniformsValues({ phase: this.phase });
+
+        this.last_t = t;
     }
 }
