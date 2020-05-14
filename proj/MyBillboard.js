@@ -4,12 +4,14 @@
 * @param scene - Reference to MyScene object
 */
 class MyBillboard extends CGFobject{
+   
    constructor(scene) {
       super(scene);
       this.plane = new MyPlane(this.scene,1);
       this.progressBar = new MyPlane(this.scene,10);
       this.bar1 = new MyPlane(this.scene,10);
       this.bar2 = new MyPlane(this.scene,10);
+
   }
 
   display(){
