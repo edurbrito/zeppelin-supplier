@@ -21,8 +21,9 @@ class MyVehicle extends CGFobject {
         this.vWingDown = new Wing(this.scene);
         this.vWingUp = new Wing(this.scene);
         this.hWing = new Wing(this.scene);
+        this.flag = new Flag(this.scene);
 
-        this.objects = [this.body, this.cabin, this.motor, this.vWingDown, this.vWingUp, this.hWing];
+        this.objects = [this.body, this.cabin, this.motor, this.vWingDown, this.vWingUp, this.hWing, this.flag];
     }
     
     display(){
@@ -31,6 +32,13 @@ class MyVehicle extends CGFobject {
 
         this.scene.translate(this.x,this.y,this.z);
         this.scene.rotate(graToRad(this.angle),0,1,0);
+
+        this.scene.pushMatrix();
+        this.flag.display();
+        this.scene.popMatrix();
+
+        this.scene.setActiveShader(this.scene.defaultShader);
+
 
         var wings = [this.vWingDown, this.hWing, this.vWingUp, this.hWing];
 
@@ -62,6 +70,7 @@ class MyVehicle extends CGFobject {
         this.scene.planeMaterial1.apply();
         this.body.display();
         this.scene.popMatrix();
+
         this.scene.translate(0,10,0);
         this.scene.rotate(graToRad(90), 1,0,0);  
 
@@ -83,6 +92,7 @@ class MyVehicle extends CGFobject {
             this.motor.update(this.angularSpeed * this.pilotRadius);
             this.vWingUp.update(this.pilotAngle);
             this.vWingDown.update(-this.pilotAngle);
+            this.flag.update(t, this.angularSpeed * this.pilotRadius);
         }
         else{ // Normal State
             this.x += this.speed * (t - this.last_t)/1000 * Math.sin(graToRad(this.angle));
@@ -90,6 +100,7 @@ class MyVehicle extends CGFobject {
 
             // Animations
             this.motor.update(this.speed);
+            this.flag.update(t, this.speed);
         }
 
         this.last_t = t;
@@ -241,7 +252,7 @@ class Motor extends NormalVisualizer{
                 return 10*Math.pow(x,1/3.0);
             } 
             else {
-                return -1 *10*Math.pow(-x,1/3.0);
+                return 10;
             }            
         }
 
@@ -328,5 +339,57 @@ class Wing extends NormalVisualizer {
             this.wingRot = Math.max(this.wingRot + turn, -30);
         else
             this.wingRot = Math.min(this.wingRot + turn, 30);
+    }
+}
+
+class Flag extends NormalVisualizer {
+    constructor(scene){
+        super();
+        this.scene = scene;
+
+        this.flag = new MyPlane(this.scene,20);
+        this.rope = new MyPlane(this.scene,20);
+
+        this.objects = [this.flag, this.rope];
+    }
+
+    display(){
+        this.scene.flagMaterial.apply();
+        this.scene.setActiveShader(this.scene.flagShader);
+        this.scene.flagTexture.bind(0);
+        
+        this.scene.pushMatrix();
+        this.scene.translate(0,1.1,-5);
+        this.scene.rotate(graToRad(90),0,1,0);
+        this.scene.scale(3,1.5,1);
+        this.flag.display();
+        this.scene.popMatrix();  
+
+        this.scene.pushMatrix();
+        this.scene.translate(0,1.8,-2.25);
+        this.scene.rotate(graToRad(90),0,1,0);
+        this.scene.scale(2.5,0.01,1);
+        this.scene.planeMaterial3.apply();
+        this.rope.display();
+        this.scene.popMatrix();
+
+        this.scene.pushMatrix();
+        this.scene.translate(0,0.4,-2.25);
+        this.scene.rotate(graToRad(90),0,1,0);
+        this.scene.scale(2.5,0.01,1);
+        this.scene.planeMaterial3.apply();
+        this.rope.display();
+        this.scene.popMatrix();
+
+    }
+
+    update(t, speed){
+
+        function formulae(x){
+                return 1.5 * Math.pow(x,1/3.0);           
+        }
+
+        this.scene.flagShader.setUniformsValues({ timeFactor: t / 100 % 1000 });
+        this.scene.flagShader.setUniformsValues({ speedFactor: formulae(speed) });
     }
 }

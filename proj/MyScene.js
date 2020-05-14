@@ -314,11 +314,26 @@ class MyScene extends CGFscene {
         this.billboardShader = new CGFshader(this.gl, "billboard.vert", "billboard.frag");
         this.billboardShader.setUniformsValues({ deliveredSupplies: parseFloat(this.nSuppliesDelivered) });
         this.billboardShader.setUniformsValues({ totalSupplies: parseFloat(this.nSupplies) });
+        //------       
+
+         //------ Flag Material
+        this.flagTexture = new CGFtexture(this, "images/flag.jpeg");
+        this.flagMaterial.setAmbient(0.3, 0.3, 0.3, 1);
+
+		this.flagMaterial.setDiffuse(0.7, 0.7, 0.7, 1);
+		this.flagMaterial.setSpecular(0.0, 0.0, 0.0, 1);
+        this.flagMaterial.setShininess(120);
+        this.flagMaterial.setTexture(this.flagTexture);
+        this.flagMaterial.setTextureWrap('REPEAT', 'REPEAT');
+
+        this.flagShader = new CGFshader(this.gl, "flag.vert", "flag.frag");
+        this.flagShader.setUniformsValues({ speedFactor: 0 });
+        this.flagShader.setUniformsValues({ timeFactor: 0 });
         //------
+
 
         //------ Possible Scene Materials
         this.scenes = [this.scene1Material,this.scene2Material, this.scene3Material, this.scene4Material];
-        //------
  
     }
 

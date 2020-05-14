@@ -1,4 +1,4 @@
-class MyTerrain extends MyPlane{
+class MyTerrain extends MyPlane {
    constructor(scene) {
       super(scene,20);
   }
@@ -7,7 +7,6 @@ class MyTerrain extends MyPlane{
 
       this.scene.pushMatrix();
 		
-		this.updateTexCoordsGLBuffers();
 		this.scene.terrainMaterial.apply();
 		this.scene.setActiveShader(this.scene.terrainShader);
 		this.scene.terrainTextureP.bind(0);
@@ -21,8 +20,5 @@ class MyTerrain extends MyPlane{
       this.scene.popMatrix();
 
       this.scene.popMatrix();
-      
-      
    }
-
 }
