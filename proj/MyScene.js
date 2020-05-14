@@ -305,17 +305,6 @@ class MyScene extends CGFscene {
         this.barMaterial.setTextureWrap('REPEAT', 'REPEAT');
         //------
 
-        //------ Terrain Shader
-        this.terrainShader = new CGFshader(this.gl, "terrain.vert", "terrain.frag");
-        this.terrainShader.setUniformsValues({ uSampler2: 1 });
-        //------
-
-        //------ Billboard Shader
-        this.billboardShader = new CGFshader(this.gl, "billboard.vert", "billboard.frag");
-        this.billboardShader.setUniformsValues({ deliveredSupplies: parseFloat(this.nSuppliesDelivered) });
-        this.billboardShader.setUniformsValues({ totalSupplies: parseFloat(this.nSupplies) });
-        //------       
-
          //------ Flag Material
         this.flagMaterial = new CGFappearance(this);
         this.flagMaterial.setAmbient(0.3, 0.3, 0.3, 1);
@@ -325,8 +314,21 @@ class MyScene extends CGFscene {
         this.flagTexture = new CGFtexture(this, "images/flag.jpeg");
         this.flagMaterial.setTexture(this.flagTexture);
         this.flagMaterial.setTextureWrap('REPEAT', 'REPEAT');
+        //------
 
-        this.flagShader = new CGFshader(this.gl, "flag.vert", "flag.frag");
+        //------ Terrain Shader
+        this.terrainShader = new CGFshader(this.gl, "shaders/terrain.vert", "shaders/terrain.frag");
+        this.terrainShader.setUniformsValues({ uSampler2: 1 });
+        //------
+
+        //------ Billboard Shader
+        this.billboardShader = new CGFshader(this.gl, "shaders/billboard.vert", "shaders/billboard.frag");
+        this.billboardShader.setUniformsValues({ deliveredSupplies: parseFloat(this.nSuppliesDelivered) });
+        this.billboardShader.setUniformsValues({ totalSupplies: parseFloat(this.nSupplies) });
+        //------       
+    
+        //------ Flag Shader
+        this.flagShader = new CGFshader(this.gl, "shaders/flag.vert", "shaders/flag.frag");
         this.flagShader.setUniformsValues({ speedFactor: 0 });
         this.flagShader.setUniformsValues({ timeFactor: 0 });
         //------
@@ -388,9 +390,7 @@ class MyScene extends CGFscene {
         this.billboard.display();
         
         this.terrain.display();
-
-        this.setActiveShader(this.defaultShader);
-
+    
         this.pushMatrix();
         this.lights[1].enable();
         this.lights[1].update();
@@ -399,11 +399,12 @@ class MyScene extends CGFscene {
         this.lights[1].update();
         this.popMatrix();
         
-        
         // ---- END Primitive drawing section
     }
 }
 
-function graToRad(val){
+// UTILS
+
+function degreesToRad(val){
     return (val * Math.PI)/180;
 }
