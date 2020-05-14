@@ -22,7 +22,7 @@ class MyBillboard extends CGFobject{
 
      // Display Plane
      this.scene.pushMatrix();
-     this.scene.translate(0,1,0);
+     this.scene.translate(0,1.5,0);
      this.scene.scale(2,1,1);
      this.scene.billboardMaterial.apply();
      this.plane.display();
@@ -30,7 +30,7 @@ class MyBillboard extends CGFobject{
 
      // Display progress Bar
      this.scene.pushMatrix();
-     this.scene.translate(0,0.8,0);
+     this.scene.translate(0.0,1.3,0.01);
      this.scene.scale(1.5,0.2,1);
      this.scene.setActiveShader(this.scene.billboardShader);
      this.plane.display();
@@ -40,14 +40,14 @@ class MyBillboard extends CGFobject{
 
      // Display Bars
      this.scene.pushMatrix();
-     this.scene.translate(0.95,0,0);
+     this.scene.translate(0.95,0.5,0);
      this.scene.scale(0.1,1,1);
      this.scene.barMaterial.apply();
      this.plane.display();
      this.scene.popMatrix();
 
      this.scene.pushMatrix();
-     this.scene.translate(-0.95,0,0);
+     this.scene.translate(-0.95,0.5,0);
      this.scene.scale(0.1,1,1);
      this.scene.barMaterial.apply();
      this.plane.display();
