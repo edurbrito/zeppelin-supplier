@@ -155,8 +155,8 @@ class MyScene extends CGFscene {
             this.last_supply_t += t - this.last_t;
             this.last_t = t;
 
-            this.billboardShader.setUniformsValues({ deliveredSupplies: parseFloat(this.nSuppliesDelivered) });
-            this.billboardShader.setUniformsValues({ totalSupplies:  parseFloat(this.nSupplies) });
+            this.billboardShader.setUniformsValues({ deliveredSupplies: this.nSuppliesDelivered });
+            this.billboardShader.setUniformsValues({ totalSupplies: this.nSupplies });
         }
         else{
             this.vehicle.reset();
@@ -366,27 +366,29 @@ class MyScene extends CGFscene {
             //this.cubeMap.face.disableNormalViz();
         }
 
-        if(this.selectedObject == 0)
+        if(this.selectedObject == 0){
             this.cylinderMaterial.apply();
-        else if(this.selectedObject == 1)
+            this.objects[this.selectedObject].display();
+        }
+        else if(this.selectedObject == 1){
             this.earthMaterial.apply();
+            this.objects[this.selectedObject].display();
+        }
+            
         else if(this.selectedObject == 2){ 
             this.pushMatrix();
             this.translate(this.vehicle.x, this.vehicle.y, this.vehicle.z);
             this.scale(this.scaleFactor,this.scaleFactor,this.scaleFactor); // Vehicle Object Scale
             this.translate(-this.vehicle.x, -this.vehicle.y, -this.vehicle.z);
-        }
-        
-        this.objects[this.selectedObject].display();
-        
-        if(this.selectedObject == 2){
+            this.objects[this.selectedObject].display();  
+            this.popMatrix();
+
             // Display supplies
             for(var i = 0; i < this.nSupplies; i++){
                 this.supplies[i].display();
-            }   
-            this.popMatrix(); // Vehicle Object Scale
+            } 
         }
-
+        
         this.billboard.display();
         
         this.terrain.display();

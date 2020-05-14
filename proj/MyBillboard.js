@@ -7,11 +7,10 @@ class MyBillboard extends CGFobject{
    
    constructor(scene) {
       super(scene);
-      this.plane = new MyPlane(this.scene,1);
+      this.plane = new MyPlane(this.scene,10);
       this.progressBar = new MyPlane(this.scene,10);
       this.bar1 = new MyPlane(this.scene,10);
       this.bar2 = new MyPlane(this.scene,10);
-
   }
 
   display(){
@@ -55,6 +54,8 @@ class MyBillboard extends CGFobject{
      this.plane.display();
      this.scene.popMatrix();
 
-     this.scene.popMatrix();
+   this.scene.popMatrix();
+
   }
+
 }
