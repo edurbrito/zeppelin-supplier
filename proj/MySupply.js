@@ -11,6 +11,7 @@ const SupplyStates = {
 };
 
 class MySupply extends CGFobject {
+   
 	constructor(scene) {
         super(scene);
 
@@ -35,10 +36,10 @@ class MySupply extends CGFobject {
 
    update(t){
    
-      this.delta_t = (t-this.last_t)/1000; // Time in seconds
+      var delta_t = (t-this.last_t)/1000; // Time in seconds
 
       if(this.state == SupplyStates.FALLING){
-         this.dropPosition[1] += this.speed * this.delta_t;
+         this.dropPosition[1] += this.speed * delta_t;
 
          // Y = 0 >> End falling animation and start landing
          if(this.dropPosition[1] <= this.side/2){
@@ -65,9 +66,11 @@ class MySupply extends CGFobject {
    }
 
    displayFalling(){
-      this.scene.woodMaterial.apply();
 
       this.scene.pushMatrix();
+
+      this.scene.woodMaterial.apply();
+      
       this.scene.scale(this.side,this.side,this.side);
       this.scene.translate(this.dropPosition[0],this.dropPosition[1],this.dropPosition[2]);
 
@@ -120,9 +123,11 @@ class MySupply extends CGFobject {
    }
    
    displayOnLanded(){
-      this.scene.woodMaterial.apply();
 
       this.scene.pushMatrix();
+      
+      this.scene.woodMaterial.apply();
+
       this.scene.scale(this.side,this.side,this.side);
       this.scene.translate(this.dropPosition[0],this.dropPosition[1],this.dropPosition[2]);
 

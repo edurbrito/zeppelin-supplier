@@ -19,7 +19,7 @@ class MyBillboard extends CGFobject{
 
    this.scene.translate(-2,0,-8);
    this.scene.scale(4,4,4);
-   this.scene.rotate(Math.PI / 6,0,1,0);
+   this.scene.rotate(degreesToRad(180) / 6,0,1,0);
 
      // Display Plane
      this.scene.pushMatrix();
