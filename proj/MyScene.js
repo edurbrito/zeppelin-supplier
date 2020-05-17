@@ -23,24 +23,27 @@ class MyScene extends CGFscene {
         
         this.enableTextures(true);
 
-        this.loadMaterials();
-
         // Initialize scene objects
         this.axis = new CGFaxis(this);
+        
+        this.cubeMap = new MyCubeMap(this);
+        this.terrain = new MyTerrain(this);
+        
         this.incompleteSphere = new MySphere(this, 16, 8);
         this.cylinder = new MyCylinder(this,30,10);
         this.vehicle = new MyVehicle(this);
         this.supplies = new Array();
         this.billboard = new MyBillboard(this);
+
         this.nSuppliesDelivered = 0;
         this.nSupplies = 5;
+        this.last_supply_t = 0;
+        this.last_t = 0;
 
         for (var i = 0; i < this.nSupplies; i++)
             this.supplies.push(new MySupply(this));
 
-        this.last_supply_t = 0;
-        this.last_t = 0;
-
+        this.loadMaterials();
 
         this.objects = [this.cylinder,this.incompleteSphere, this.vehicle];
 
@@ -50,10 +53,7 @@ class MyScene extends CGFscene {
         // Labels and ID's for scene selection on MyInterface
         this.sceneIDs = { 'Scene1': 0 , 'Scene2': 1, 'Scene3': 2, 'Scene4':3};
 
-        // Objects connected to MyInterface
-        this.cubeMap = new MyCubeMap(this);
-        this.terrain = new MyTerrain(this);
-
+        // Variables connected to MyInterface
         this.selectedObject = 2;
         this.scaleFactor = 1;
         this.speedFactor = 1;
@@ -129,7 +129,7 @@ class MyScene extends CGFscene {
         }
         if (this.gui.isKeyPressed("KeyL")){
             text += " L ";
-            if(this.nSuppliesDelivered < this.nSupplies && this.last_supply_t > 100){
+            if(this.nSuppliesDelivered < this.nSupplies && this.last_supply_t > 100){ // 100 ms Interval between drops
                 this.supplies[this.nSuppliesDelivered].drop([this.vehicle.x,this.vehicle.y, this.vehicle.z]);
                 this.nSuppliesDelivered++;
                 this.last_supply_t = 0;
@@ -156,7 +156,6 @@ class MyScene extends CGFscene {
             this.last_t = t;
 
             this.billboardShader.setUniformsValues({ deliveredSupplies: this.nSuppliesDelivered });
-            this.billboardShader.setUniformsValues({ totalSupplies: this.nSupplies });
         }
         else{
             this.vehicle.reset();

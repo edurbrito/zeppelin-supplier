@@ -18,52 +18,51 @@ class MyVehicle extends CGFobject {
         this.body = new MySphere(this.scene,16,8);
         this.cabin = new Cabin(this.scene);
         this.motor = new Motor(this.scene);
-        this.vWingDown = new Wing(this.scene);
-        this.vWingUp = new Wing(this.scene);
-        this.hWing = new Wing(this.scene);
+        this.vWings = new Wing(this.scene);
+        this.hWings = new Wing(this.scene);
         this.flag = new Flag(this.scene);
 
-        this.objects = [this.body, this.cabin, this.motor, this.vWingDown, this.vWingUp, this.hWing, this.flag];
+        this.objects = [this.body, this.cabin, this.motor, this.vWings, this.hWings, this.flag];
     }
     
     display(){
         
         this.scene.pushMatrix();
 
+        // Set Vehicle Position on the Screen
         this.scene.translate(this.x,this.y,this.z);
         this.scene.rotate(degreesToRad(this.angle),0,1,0);
 
-        this.scene.pushMatrix();
+        // Vehicle Flag
         this.flag.display();
+
+        // Vehicle Horizontal Wings
+        this.scene.pushMatrix();
+        this.scene.translate(0.2,1,-2);
+        this.scene.rotate(degreesToRad(90),0,0,1);
+        this.hWings.display();
         this.scene.popMatrix();
 
-        this.scene.setActiveShader(this.scene.defaultShader);
-
-
-        var wings = [this.vWingDown, this.hWing, this.vWingUp, this.hWing];
-
-        var ang = 0;
-        for(var i = 0; i < 4; i++){
-            this.scene.pushMatrix();
-            this.scene.translate(0,1,-2);
-            this.scene.rotate(degreesToRad(ang),0,0,1);
-            this.scene.planeMaterial2.apply();
-            wings[i].display();
-            this.scene.popMatrix();
-            ang += 90;
-        }
-        this.cabin.display();
-
+        // Vehicle Vertical Wings
+        this.scene.pushMatrix();
+        this.scene.translate(0,0.8,-2);
+        this.vWings.display();
+        this.scene.popMatrix();
+      
+        // Two Vehicle Motors at the Cabin sides
         var factor = 1;
         for(var i = 0; i < 2; i++){
             this.scene.pushMatrix();
             this.scene.translate(factor * 0.2,0,-0.6);
-            this.scene.scale(0.6,0.6,0.6);
             this.motor.display();
             this.scene.popMatrix();
             factor = -1;
         }
 
+        // Vehicle Cabin bellow the Main Body
+        this.cabin.display();
+        
+        // Vehicle Main Body - Dimensions 2x1
         this.scene.pushMatrix();
         this.scene.translate(0,1.1,0);
         this.scene.scale(1,1,2);
@@ -71,16 +70,13 @@ class MyVehicle extends CGFobject {
         this.body.display();
         this.scene.popMatrix();
 
-        this.scene.translate(0,10,0);
-        this.scene.rotate(degreesToRad(90), 1,0,0);  
-
         this.scene.popMatrix();
     }
 
     update(t){
         
         if(this.autoPilot){
-            var deltaAngle = (t - this.last_t) * this.angularSpeed;
+            var deltaAngle = (t - this.last_t)/1000 * this.angularSpeed;
             this.pilotAngle += deltaAngle; // rotation angle
 
             this.x = this.pilotCenter[0] + this.pilotRadius * Math.sin(degreesToRad(this.pilotAngle));
@@ -90,8 +86,7 @@ class MyVehicle extends CGFobject {
 
             // Animations
             this.motor.update(this.linearSpeed);
-            this.vWingUp.update(this.pilotAngle);
-            this.vWingDown.update(-this.pilotAngle);
+            this.vWings.update(-this.pilotAngle);
             this.flag.update(t, this.linearSpeed);
         }
         else{ // Normal State
@@ -100,6 +95,7 @@ class MyVehicle extends CGFobject {
 
             // Animations
             this.motor.update(this.speed);
+            this.vWings.update(-this.angle);
             this.flag.update(t, this.speed);
         }
 
@@ -108,8 +104,6 @@ class MyVehicle extends CGFobject {
 
     turn(val){
         this.angle += val;
-        this.vWingUp.update(val);
-        this.vWingDown.update(-val);
     }
 
     accelerate(val){
@@ -122,7 +116,7 @@ class MyVehicle extends CGFobject {
         
         if(this.autoPilot){
             this.pilotRadius = 5;
-            this.pilotPeriod = 5000; // milliseconds         
+            this.pilotPeriod = 5;        
             this.pilotAngle = this.angle - 90;
             
             var pilotInitialPosition = [this.x,this.y,this.z];  
@@ -189,13 +183,17 @@ class Cabin extends NormalVisualizer{
     }
 
     display(){
+
+        // Cabin Body - Tube
         this.scene.pushMatrix();
         this.scene.translate(0,0,-0.5);
         this.scene.scale(0.2,0.2,1);
         this.scene.rotate(degreesToRad(90),1,0,0);
+        this.scene.planeMaterial2.apply();
         this.cabinBody.display();
         this.scene.popMatrix();
 
+        // Two Cabin extremes - Spheres
         var factor = 1;
         for(var i = 0; i < 2; i++){
             this.scene.pushMatrix();
@@ -224,41 +222,47 @@ class Motor extends NormalVisualizer{
     }
 
     display(){
-        this.scene.pushMatrix();
-        this.scene.scale(0.1,0.1,0.3);
-        this.scene.rotate(degreesToRad(90),1,0,0);
-        this.scene.planeMaterial2.apply();
-        this.round.display();
-        this.scene.popMatrix();
 
         this.scene.pushMatrix();
-        this.scene.translate(0,0,-0.3);
-        this.scene.scale(0.05,0.05,0.05);
-        this.scene.rotate(degreesToRad(90),1,0,0);
-        this.scene.planeMaterial2.apply();
-        this.round.display();
-        this.scene.popMatrix();
+        this.scene.scale(0.6,0.6,0.6);
 
-        this.scene.pushMatrix();
-        this.scene.rotate(degreesToRad(this.turbineRot),0,0,1);
-        this.scene.translate(0,-0.25,-0.3);
-        this.scene.scale(0.02,0.5,0.02);
-        this.scene.planeMaterial3.apply();
-        this.turbine.display();
+            this.scene.pushMatrix();
+            this.scene.scale(0.1,0.1,0.3);
+            this.scene.rotate(degreesToRad(90),1,0,0);
+            this.scene.planeMaterial2.apply();
+            this.round.display();
+            this.scene.popMatrix();
+
+            this.scene.pushMatrix();
+            this.scene.translate(0,0,-0.3);
+            this.scene.scale(0.05,0.05,0.05);
+            this.scene.rotate(degreesToRad(90),1,0,0);
+            this.scene.planeMaterial2.apply();
+            this.round.display();
+            this.scene.popMatrix();
+
+            this.scene.pushMatrix();
+            this.scene.rotate(degreesToRad(this.turbineRot),0,0,1);
+            this.scene.translate(0,-0.25,-0.3);
+            this.scene.scale(0.02,0.5,0.02);
+            this.scene.planeMaterial3.apply();
+            this.turbine.display();
+            this.scene.popMatrix();
+
         this.scene.popMatrix();
     }
 
-    update(speed){
-        function formulae(x){
-            if (x > 0) {
-                return 10*Math.pow(x,1/3.0);
-            } 
-            else {
-                return 10;
-            }            
+    speedFormula(x){
+        if (x > 0) {
+            return 360 * (1 - 1 / Math.pow(x,1/3.0));
+        } 
+        else {
+            return 10;
         }
-
-        this.turbineRot = (this.turbineRot + formulae(speed*100));
+    }          
+    
+    update(speed){
+        this.turbineRot = this.turbineRot + this.speedFormula(speed);
     }
 }
 
@@ -269,11 +273,11 @@ class WingObject extends CGFobject{
 	}
 	initBuffers() {
 		this.vertices = [
-            -1,0,0,
+            -1,0.5,0,
             0,0,0,
             0,1,0,
             1,0,0,
-            1,1,0,
+            1,1,0
 		];
 
 		//Counter-clockwise reference of vertices
@@ -317,7 +321,8 @@ class Wing extends NormalVisualizer {
         this.scene = scene;
 
         this.wing = new WingObject(this.scene);
-        this.wingRot = 0;
+        this.last_angle = 0;
+        this.angle = 0;
 
         this.objects = [this.wing];
     }
@@ -325,22 +330,37 @@ class Wing extends NormalVisualizer {
     display(){
 
         this.scene.pushMatrix();
-        this.scene.rotate(degreesToRad(this.wingRot),0,1,0);
-        this.scene.translate(0,0.25,0.25);
+        this.scene.rotate(degreesToRad(this.angle),0,1,0);
+        this.scene.translate(0,0.5,0.25);
         this.scene.scale(0.5,0.5,0.5);
         this.scene.rotate(degreesToRad(90),0,1,0);
+        this.scene.planeMaterial2.apply();
         this.wing.display();
         this.scene.popMatrix();
 
-        if(this.wingRot > 0) this.wingRot -= 3;
-        else if(this.wingRot < 0) this.wingRot += 3;
+        this.scene.pushMatrix();
+        this.scene.rotate(degreesToRad(this.angle),0,1,0);
+        this.scene.translate(0,-0.5,0.25);
+        this.scene.scale(0.5,0.5,0.5);
+        this.scene.rotate(degreesToRad(90),0,1,0);
+        this.scene.planeMaterial2.apply();
+        this.wing.display();
+        this.scene.popMatrix();
+
     }
 
-    update(turn){
-        if(turn < 0)
-            this.wingRot = Math.max(this.wingRot + turn, -30);
-        else
-            this.wingRot = Math.min(this.wingRot + turn, 30);
+    update(angle){
+
+        if(this.last_angle - angle > 0) // Positive Variation -> Negative Rotation
+            this.angle = Math.max(this.angle - 5, -30);
+        else if(this.last_angle - angle < 0) // Negative Variation -> Positive Rotation
+            this.angle = Math.min(this.angle + 5, 30);
+        else { // Restore 0 angle state if No Variation
+            if(this.angle > 0) this.angle -= 1;
+            else if(this.angle < 0) this.angle += 1;
+        }
+
+        this.last_angle = angle;
     }
 }
 
@@ -359,14 +379,14 @@ class Flag extends NormalVisualizer {
     }
 
     display(){
-        this.scene.flagMaterial.apply();
-        this.scene.setActiveShader(this.scene.flagShader);
-        this.scene.flagTexture.bind(0);
         
         this.scene.pushMatrix();
         this.scene.translate(0,1.1,-5);
         this.scene.rotate(degreesToRad(90),0,1,0);
         this.scene.scale(3,1.5,1);
+        this.scene.flagMaterial.apply();
+        this.scene.setActiveShader(this.scene.flagShader);
+        this.scene.flagTexture.bind(0);
         this.flag.display();
         this.scene.popMatrix();  
 
@@ -386,12 +406,14 @@ class Flag extends NormalVisualizer {
         this.rope.display();
         this.scene.popMatrix();
 
+        this.scene.setActiveShader(this.scene.defaultShader);
     }
 
     update(t, speed){
 
         var deltaT = t - this.last_t;
         var deltaX = 0.01 * speed * deltaT;
+
         // If zero : swing slowly | else : not swing too rapidly
         deltaX = deltaX == 0 ? 0.5 : Math.min(deltaX + 0.5, 1.5); 
 
