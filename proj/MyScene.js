@@ -286,20 +286,20 @@ class MyScene extends CGFscene {
 
         //------ Billboard Material
         this.billboardMaterial = new CGFappearance(this);
-        this.planeMaterial2.setAmbient(0.9, 0.9, 0.9, 1);
-        this.planeMaterial2.setDiffuse(0.9, 0.9, 0.9, 1);
-        this.planeMaterial2.setSpecular(0.9, 0.9, 0.9, 1);
-        this.planeMaterial2.setShininess(10.0);
+        this.billboardMaterial.setAmbient(0.9, 0.9, 0.9, 1);
+        this.billboardMaterial.setDiffuse(0.9, 0.9, 0.9, 1);
+        this.billboardMaterial.setSpecular(0.9, 0.9, 0.9, 1);
+        this.billboardMaterial.setShininess(10.0);
         this.billboardMaterial.loadTexture('images/billboard.jpg');
         this.billboardMaterial.setTextureWrap('REPEAT', 'REPEAT');
         //------
 
         //------ Billboard Bar Material
         this.barMaterial = new CGFappearance(this);
-        this.planeMaterial2.setAmbient(0.9, 0.9, 0.9, 1);
-        this.planeMaterial2.setDiffuse(0.9, 0.9, 0.9, 1);
-        this.planeMaterial2.setSpecular(0.9, 0.9, 0.9, 1);
-        this.planeMaterial2.setShininess(10.0);
+        this.barMaterial.setAmbient(0.9, 0.9, 0.9, 1);
+        this.barMaterial.setDiffuse(0.9, 0.9, 0.9, 1);
+        this.barMaterial.setSpecular(0.9, 0.9, 0.9, 1);
+        this.barMaterial.setShininess(10.0);
         this.barMaterial.loadTexture('images/bar.jpg');
         this.barMaterial.setTextureWrap('REPEAT', 'REPEAT');
         //------
