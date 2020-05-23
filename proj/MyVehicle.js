@@ -379,8 +379,8 @@ class Flag extends NormalVisualizer {
     }
 
     display(){
+        
         this.scene.setActiveShader(this.scene.flagShader);
-        this.scene.flagTexture.bind(0);
 
         for(var i = 0; i < 2; i++){ // Double Sided
             

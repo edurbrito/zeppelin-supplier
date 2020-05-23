@@ -322,14 +322,12 @@ class MyScene extends CGFscene {
 
         //------ Billboard Shader
         this.billboardShader = new CGFshader(this.gl, "shaders/billboard.vert", "shaders/billboard.frag");
-        this.billboardShader.setUniformsValues({ deliveredSupplies: parseFloat(this.nSuppliesDelivered) });
-        this.billboardShader.setUniformsValues({ totalSupplies: parseFloat(this.nSupplies) });
+        this.billboardShader.setUniformsValues({ deliveredSupplies: this.nSuppliesDelivered });
+        this.billboardShader.setUniformsValues({ totalSupplies: this.nSupplies });
         //------       
     
         //------ Flag Shader
         this.flagShader = new CGFshader(this.gl, "shaders/flag.vert", "shaders/flag.frag");
-        this.flagShader.setUniformsValues({ speedFactor: 0 });
-        this.flagShader.setUniformsValues({ timeFactor: 0 });
         //------
 
         //------ Possible Scene Materials
