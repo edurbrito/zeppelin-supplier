@@ -379,32 +379,40 @@ class Flag extends NormalVisualizer {
     }
 
     display(){
-        
-        this.scene.pushMatrix();
-        this.scene.translate(0,1.1,-5);
-        this.scene.rotate(degreesToRad(90),0,1,0);
-        this.scene.scale(3,1.5,1);
-        this.scene.flagMaterial.apply();
         this.scene.setActiveShader(this.scene.flagShader);
         this.scene.flagTexture.bind(0);
-        this.flag.display();
-        this.scene.popMatrix();  
 
-        this.scene.pushMatrix();
-        this.scene.translate(0,1.8,-2.25);
-        this.scene.rotate(degreesToRad(90),0,1,0);
-        this.scene.scale(2.5,0.01,1);
-        this.scene.planeMaterial3.apply();
-        this.rope.display();
-        this.scene.popMatrix();
-
-        this.scene.pushMatrix();
-        this.scene.translate(0,0.4,-2.25);
-        this.scene.rotate(degreesToRad(90),0,1,0);
-        this.scene.scale(2.5,0.01,1);
-        this.scene.planeMaterial3.apply();
-        this.rope.display();
-        this.scene.popMatrix();
+        for(var i = 0; i < 2; i++){ // Double Sided
+            
+            this.scene.flagShader.setUniformsValues({ side: (1 - 2 * i) }); // 1 or -1, for the phase sign in the shader
+            
+            this.scene.pushMatrix();
+            this.scene.translate(0,1.1,-5);
+            this.scene.rotate(degreesToRad(90),0,1,0);
+            this.scene.scale(3,1.5,1);
+            this.scene.rotate(degreesToRad(180) * i, 0, 1, 0);
+            this.scene.flagMaterial.apply();
+            this.flag.display();
+            this.scene.popMatrix();
+                
+            this.scene.pushMatrix();
+            this.scene.translate(0,1.8,-2.25);
+            this.scene.rotate(degreesToRad(90),0,1,0);
+            this.scene.scale(2.5,0.01,1);
+            this.scene.rotate(degreesToRad(180) * i, 0, 1, 0);
+            this.scene.planeMaterial3.apply();
+            this.rope.display();
+            this.scene.popMatrix();
+    
+            this.scene.pushMatrix();
+            this.scene.translate(0,0.4,-2.25);
+            this.scene.rotate(degreesToRad(90),0,1,0);
+            this.scene.scale(2.5,0.01,1);
+            this.scene.rotate(degreesToRad(180) * i, 0, 1, 0);
+            this.scene.planeMaterial3.apply();
+            this.rope.display();
+            this.scene.popMatrix();
+        }        
 
         this.scene.setActiveShader(this.scene.defaultShader);
     }
