@@ -1,7 +1,19 @@
 zeppelin-supplier
 ------------------
 
+![](images/proj-t7g7.gif)
+
 This project aims to create a graphical scene of a zeppelin dropping some supplies, with OpenGl technology. 
+Available at https://edurbrito.github.io/zeppelin-supplier/proj/index.html.
+
+## Instructions
+
+|Camera Movement|Mouse grabbing|
+|----|----|
+|Vehicle Movement|W,S,A,D keys|
+|Auto Pilot|P key|
+|Dropping the Supplies|L key|
+|Restart|R key|
 
 ## Source
 
@@ -24,10 +36,6 @@ Shaders:
 * Billboard progress bar
 * Flag waving
 * Terrain topology
-
-## Demo
-
-![](images/proj-t7g7.gif)
 
 ## Screenshots
 
